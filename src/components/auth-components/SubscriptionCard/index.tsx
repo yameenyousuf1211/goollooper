@@ -5,12 +5,13 @@ import {globalStlyes} from '../../../styles/GlobalStyles';
 import InfoIcon from '../../../../assets/icons/InfoIcon';
 import {primaryColor} from '../../../utils/colors';
 import CustomModal from '../../modals/CustomBottomModal';
+import {IPlan, ISubscription} from '../../../interfaces/user.interface';
 
 interface Props {
-  data: any;
+  data: ISubscription | IPlan;
   isSelected: boolean;
   isShowIcon?: boolean;
-  onSelectOption: (id: string) => void;
+  onSelectOption: (id: string, name?: string, plan?: IPlan[]) => void;
   onSelectInfo?: (heading: string, text: string) => void;
 }
 
@@ -22,38 +23,50 @@ const SubscriptionCard = ({
   onSelectInfo,
 }: Props) => {
   const [infoModal, setInfoModal] = useState<boolean>(false);
-  const [infoHeading, setInfoHeading] = useState<string>('');
-  const [infoText, setInfoText] = useState<string>('');
-  const handleInfoModal = (id: string) => {
+
+  const handleInfoModal = (name: string, description: string) => {
     setInfoModal(true);
     if (onSelectInfo) {
-      if (id === 'BSPSubscription') {
-        onSelectInfo(
-          'BSP',
-          'an independent business owner who provides commercial services to GS’s at their place of choice.',
-        );
-      } else if (id === 'MBSSubscription') {
-        onSelectInfo(
-          'MBS',
-          'a business with personnel of 2 or more but no more than 10 workers.',
-        );
-      } else if (id === 'BSLSubscription') {
-        onSelectInfo(
-          'BSL',
-          'a business that provides services at its place of business.',
-        );
-      } else {
-        onSelectInfo(
-          'IW',
-          'an employee of a company or organization that will be tasked with providing services through that company or organization, strictly for that company or organization.',
-        );
-      }
+      onSelectInfo(name, description);
     }
   };
+
+  const handleSelectOption = (data: ISubscription | IPlan) => {
+    if ('plans' in data) {
+      onSelectOption(data._id, data?.name, data?.plans);
+    } else {
+      onSelectOption(data._id);
+    }
+  };
+
+  const handleInfoPress = (data: ISubscription) => {
+    if (isShowIcon && onSelectInfo) {
+      onSelectInfo(data?.name, data?.description);
+    }
+  };
+
+  const getDisplayName = (data: ISubscription | IPlan) => {
+    if ('name' in data) {
+      return data.name;
+    } else {
+      return `$${data.price}`;
+    }
+  };
+
+  const getTagline = (data: ISubscription | IPlan) => {
+    if ('tagline' in data) {
+      return data.tagline;
+    } else {
+      return `Per ${
+        data.duration.charAt(0).toUpperCase() + data.duration.slice(1)
+      }`;
+    }
+  };
+
   return (
     <TouchableOpacity
       activeOpacity={0.7}
-      onPress={() => onSelectOption(data.id)}>
+      onPress={() => handleSelectOption(data)}>
       {isSelected && (
         <View style={styles.selectedStyles}>
           <StarIcon fill="#ffffff" />
@@ -73,12 +86,13 @@ const SubscriptionCard = ({
           },
         ]}>
         <View style={{gap: 10}}>
-          <Text style={[globalStlyes.text16]}>{data.name}</Text>
-          <Text style={globalStlyes.text12}>{data.description}</Text>
+          <Text style={[globalStlyes.text16]}>{getDisplayName(data)}</Text>
+          <Text style={[globalStlyes.text12]}>({getTagline(data)})</Text>
         </View>
 
         {isShowIcon ? (
-          <TouchableOpacity onPress={() => handleInfoModal(data.id)}>
+          <TouchableOpacity
+            onPress={() => handleInfoPress(data as ISubscription)}>
             <InfoIcon />
           </TouchableOpacity>
         ) : null}

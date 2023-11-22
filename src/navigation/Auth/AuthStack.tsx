@@ -118,17 +118,17 @@ export const AuthStack = () => {
         options={{title: ''}}
       />
       <Stack.Screen
-        name="BSPSubscription"
+        name="BSP"
         component={BSPSubscription}
         options={{title: ''}}
       />
       <Stack.Screen
-        name="MBSSubscription"
+        name="MBS"
         component={MBSSubscription}
         options={{title: ''}}
       />
       <Stack.Screen
-        name="BSLSubscription"
+        name="BSL"
         component={BSLSubscription}
         options={{title: ''}}
       />

@@ -35,6 +35,11 @@ export const getServices = async () => {
   return response;
 };
 
+// getting subscriptions
+export const getSubscriptions = async () => {
+  const response = await api.get('subscription');
+  return response;
+};
 // check username
 export const checkUsername = async (userName: any) => {
   const response = await api.post(`user/check-username`, userName);

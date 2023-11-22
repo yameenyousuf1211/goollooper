@@ -87,6 +87,19 @@ export type IService = {
   subServices: ISubService[];
 };
 
+export type IPlan = {
+  _id: string;
+  price: number;
+  duration: string;
+};
+export type ISubscription = {
+  _id: string;
+  name: string;
+  tagline: string;
+  description: string;
+  plans: IPlan[];
+};
+
 // export interface IPagination = {
 
 // }

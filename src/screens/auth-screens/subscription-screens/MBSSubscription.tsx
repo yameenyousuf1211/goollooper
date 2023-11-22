@@ -10,9 +10,12 @@ import {useDispatch} from 'react-redux';
 import {setBoostType} from '../../../redux/AuthSlice';
 import CustomModal from '../../../components/modals/CustomBottomModal';
 import CustomLoadingModal from '../../../components/modals/CustomLoadingModal';
+import {IPlan} from '../../../interfaces/user.interface';
 
-const MBSSubscription = () => {
+const MBSSubscription = ({route}: any) => {
   const dispatch = useDispatch();
+  const plans = route?.params?.plans;
+
   const [selectedOption, setSelectedOption] = useState<string>('');
   const [isPaymentProcessing, setIsPaymentProcessing] =
     useState<boolean>(false);
@@ -49,15 +52,15 @@ const MBSSubscription = () => {
           <View style={styles.container}>
             <SubscriptionTitle subTitle="MBS" />
             <View style={{width: 320, gap: 10}}>
-              {MBS_SUBS.map((data: any) => {
-                let isSelected = selectedOption.includes(data.id);
+              {plans?.map((plan: IPlan) => {
+                let isSelected = selectedOption.includes(plan._id);
                 return (
                   <SubscriptionCard
-                    key={data.id}
-                    data={data}
+                    key={plan._id}
+                    data={plan}
                     isSelected={isSelected}
                     isShowIcon={false}
-                    onSelectOption={() => handleSelectOption(data.id)}
+                    onSelectOption={() => handleSelectOption(plan._id)}
                   />
                 );
               })}

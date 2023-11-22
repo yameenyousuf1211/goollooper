@@ -9,10 +9,12 @@ import {verticalScale} from '../../../utils/metrics';
 import CustomLoadingModal from '../../../components/modals/CustomLoadingModal';
 import CustomModal from '../../../components/modals/CustomBottomModal';
 import {useDispatch} from 'react-redux';
-import { setBoostType } from '../../../redux/AuthSlice';
+import {setBoostType} from '../../../redux/AuthSlice';
+import {IPlan} from '../../../interfaces/user.interface';
 
-const BSPSubscription = () => {
+const BSPSubscription = ({route}: any) => {
   const dispatch = useDispatch();
+  const plans = route?.params?.plans;
   const [selectedOption, setSelectedOption] = useState<string>('');
   const [isPaymentProcessing, setIsPaymentProcessing] =
     useState<boolean>(false);
@@ -28,7 +30,7 @@ const BSPSubscription = () => {
       setIsPaymentProcessing(false);
       setIsPaymentSuccessfull(true);
     }, 3000);
-    dispatch(setBoostType('BSP'))
+    dispatch(setBoostType('BSP'));
   };
 
   return (
@@ -50,15 +52,15 @@ const BSPSubscription = () => {
           <View style={styles.container}>
             <SubscriptionTitle subTitle="BSP" />
             <View style={{width: 320, gap: 10}}>
-              {BSP_SUBS.map((data: any) => {
-                let isSelected = selectedOption.includes(data.id);
+              {plans?.map((plan: IPlan) => {
+                let isSelected = selectedOption.includes(plan._id);
                 return (
                   <SubscriptionCard
-                    key={data.id}
-                    data={data}
+                    key={plan._id}
+                    data={plan}
                     isSelected={isSelected}
                     isShowIcon={false}
-                    onSelectOption={() => handleSelectOption(data.id)}
+                    onSelectOption={() => handleSelectOption(plan._id)}
                   />
                 );
               })}
