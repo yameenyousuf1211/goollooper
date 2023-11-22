@@ -35,6 +35,12 @@ export const getServices = async () => {
   return response;
 };
 
+// check username
+export const checkUsername = async (userName: any) => {
+  const response = await api.post(`user/check-username`, userName);
+  return response;
+};
+
 export const updateProfile = async (userData: IUser) => {
   let formData = new FormData();
   formData.append('firstName', userData?.firstName);
@@ -43,8 +49,25 @@ export const updateProfile = async (userData: IUser) => {
   // formData.append('about', userData?.about);
   // formData.append('phone', userData.phone);
   // formData.append('age', Number(userData.age));
+  formData.append('role', userData.role);
   formData.append('gender', userData?.gender?.toLowerCase());
-  // formData.append('volunteer', userData?.volunteer);
+  if (userData?.profileImage) {
+    formData.append('profileImage', userData?.profileImage);
+  }
+  if (userData?.volunteer) {
+    userData?.volunteer.forEach((volunteerData: any, index) => {
+      formData.append(`volunteer[${index}][service]`, volunteerData.service);
+      formData.append(
+        `volunteer[${index}][subService]`,
+        volunteerData.subService,
+      );
+    });
+    if (userData?.gallery) {
+      for (let i = 0; i < userData.gallery.length; i++) {
+        formData.append('gallery', userData.gallery[i]);
+      }
+    }
+  }
 
   const response = await api.put(`user/${userData?._id}`, formData, {
     headers: {

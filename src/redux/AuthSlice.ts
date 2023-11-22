@@ -13,7 +13,7 @@ interface IAuth {
 }
 
 const initialState: IAuth = {
-  userRole: null,
+  userRole: 'user',
   boostType: null,
   user: null,
   isAuthenticated: false,

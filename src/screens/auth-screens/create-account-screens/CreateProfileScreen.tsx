@@ -42,6 +42,8 @@ import {
 } from '../../../interfaces/user.interface';
 import Toast from 'react-native-toast-message';
 import {updateProfile} from '../../../api';
+import useLoading from '../../../hooks/useLoading';
+import CustomLoader from '../../../components/reuseable-components/CustomLoader';
 
 const {width, height} = Dimensions.get('screen');
 const initialValues: IUser = {
@@ -60,6 +62,7 @@ const CreateProfileScreen = ({navigation}: any) => {
   const boostType = useSelector((state: RootState) => state.auth.boostType);
   const userRole = useSelector((state: RootState) => state.auth.userRole);
   const userData = useSelector((state: RootState) => state.auth.user);
+  const {isLoading, startLoading, stopLoading} = useLoading();
 
   const dispatch = useDispatch();
 
@@ -89,6 +92,7 @@ const CreateProfileScreen = ({navigation}: any) => {
   };
 
   const handleSubmit = async (values: IUser) => {
+    startLoading();
     const volunteerItems = userData?.volunteer?.flatMap((item: IService) =>
       item.subServices.map((subItem: ISubService) => ({
         service: item._id,
@@ -98,25 +102,28 @@ const CreateProfileScreen = ({navigation}: any) => {
     const reqData: Partial<IUser> = {
       ...userData,
       ...values,
+      profileImage: profilePicture,
+      role: userRole,
       email: userData?.email,
       phone: `+${phoneCode}${values.phone}`,
       volunteer: volunteerItems as any,
       isProfileCompleted: true,
     };
+    console.log(reqData, 'REQDATA');
     try {
       const response = await updateProfile(reqData as IUser);
       const data = response?.data.data;
       console.log(response?.data?.message, 'DATA');
-      Toast.show({
-        type: 'success',
-        text1: `${response?.data?.message}`,
-      });
-      setIsProfileCompleted(true);
-      dispatch(setUserData(data));
-      dispatch(setAuthentication(true));
+      // setIsProfileCompleted(true);
+      // dispatch(setUserData(data));
     } catch (error: any) {
-      console.log(error?.response?.data);
+      Toast.show({
+        type: 'error',
+        text1: `${error?.response?.data?.message}`,
+      });
+      console.log(error?.response);
     }
+    stopLoading();
   };
 
   return (
@@ -345,7 +352,7 @@ const CreateProfileScreen = ({navigation}: any) => {
                         }}
                         onPress={() => {
                           if (userRole === 'service_provider') {
-                            dispatch(setuserRole(null));
+                            dispatch(setuserRole('user'));
                           } else {
                             dispatch(setuserRole('service_provider'));
                           }
@@ -354,9 +361,9 @@ const CreateProfileScreen = ({navigation}: any) => {
                           style={{
                             width: 14,
                             height: 14,
-                            borderWidth: userRole ? undefined : 1,
+                            borderWidth: userRole === "service_provider" ? undefined : 1,
                             borderColor: '#B9BABB',
-                            backgroundColor: userRole
+                            backgroundColor: userRole === "service_provider"
                               ? primaryColor
                               : undefined,
                           }}
@@ -384,8 +391,9 @@ const CreateProfileScreen = ({navigation}: any) => {
                     <CustomButton
                       // isDisabled={!isCreateProfileForm}
                       extraStyles={{width: 77}}
+                      isDisabled={isLoading}
                       onPress={handleSubmit}>
-                      Done
+                      {isLoading ? <CustomLoader /> : 'Done'}
                     </CustomButton>
                   </View>
                 </View>

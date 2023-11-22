@@ -1,22 +1,38 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {globalStlyes} from '../../../styles/GlobalStyles';
 import {primaryColor} from '../../../utils/colors';
 import CheckIconTwo from '../../../../assets/icons/CheckIconTwo';
-import ChevronBottomIcon from '../../../../assets/icons/ChevronBottomIcon';
 import ChevronBottomIconTwo from '../../../../assets/icons/ChevronBottomIconTwo';
-import {VOLUNTEERS_DATA} from '../../../utils/data';
-import ChevronRightIcon from '../../../../assets/icons/ChevronRightIcon';
 import CustomButton from '../../../components/reuseable-components/CustomButton';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../../redux/store';
+import {IUser} from '../../../interfaces/user.interface';
+import {setUserData} from '../../../redux/AuthSlice';
 
 const GenderScreen = ({navigation}: any) => {
+  const dispatch = useDispatch();
+  const prevUserData = useSelector((state: RootState) => state.auth.user);
   const [selectedItem, setSelectedItem] = useState<string>('');
+  useEffect(() => {
+    if (prevUserData?.gender) {
+      setSelectedItem(prevUserData.gender);
+    }
+  }, []);
   const handleSelectItem = (item: string) => {
     if (selectedItem?.includes(item)) {
       setSelectedItem('');
     } else {
       setSelectedItem(item);
     }
+  };
+  const handleSubmit = () => {
+    const data: Partial<IUser> = {
+      ...prevUserData,
+      gender: selectedItem,
+    };
+    dispatch(setUserData(data as IUser));
+    navigation.navigate('CreateProfileScreen');
   };
   return (
     <View
@@ -66,7 +82,7 @@ const GenderScreen = ({navigation}: any) => {
                   padding: 10,
                   borderRadius: 12,
                 }}
-                key={item?._id}
+                key={item}
                 onPress={() => handleSelectItem(item)}>
                 <Text
                   style={{
@@ -83,9 +99,7 @@ const GenderScreen = ({navigation}: any) => {
         <CustomButton
           isDisabled={selectedItem === ''}
           extraStyles={{width: 77}}
-          onPress={() =>
-            navigation.navigate('CreateProfileScreen', {gender: selectedItem})
-          }>
+          onPress={handleSubmit}>
           Done
         </CustomButton>
       </View>

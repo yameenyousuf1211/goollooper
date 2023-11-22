@@ -15,6 +15,7 @@ import {
   IUserFormErrors,
   IUserRole,
 } from '../../../../../interfaces/user.interface';
+import {checkUsername} from '../../../../../api';
 
 interface Props {
   values: IUser;
@@ -49,24 +50,31 @@ const ProfileOverview = ({
   const [galleryPhotoThree, setGalleryPhotoThree] = useState<IFileData | null>(
     null,
   );
+  const [userNameError, setUserNameError] = useState<string>('');
   const phoneInput = useRef<PhoneInput>(null);
 
   useEffect(() => {
-    if ((route?.params as any)?.gender) {
-      setFieldValue('gender', (route?.params as any)?.gender);
+    if (userData?.volunteer) {
+      setFieldValue('gender', userData?.gender);
     }
     if (userData?.volunteer) {
       setFieldValue('volunteer', userData?.volunteer);
     }
+  }, [userData]);
 
-    // if ((route?.params as any)?.SPSpecialityItems?.length > 0) {
-    //   setFieldValue(
-    //     'serviceProviderSpeciality',
-    //     (route?.params as any)?.SPSpecialityItems,
-    //   );
-    // }
-  }, [route, userData]);
-  console.log(userData, 'iserdata');
+  const handleChangeUserName = async (text: string, setFieldValue: any) => {
+    setFieldValue('userName', text);
+    try {
+      const response = await checkUsername({userName: text});
+      console.log(response.data);
+      setUserNameError('');
+    } catch (error: any) {
+      console.log(error.response.data);
+      if (error?.response.status == 409) {
+        setUserNameError(error?.response.data.message);
+      }
+    }
+  };
 
   return (
     <View style={{gap: 5}}>
@@ -89,10 +97,10 @@ const ProfileOverview = ({
       <CustomInput
         label="Username"
         value={values.userName}
-        error={errors.userName}
+        error={errors.userName || userNameError}
         touched={touched.userName}
         initialTouched={true}
-        handleChange={handleChange('userName')}
+        handleChange={text => handleChangeUserName(text, setFieldValue)}
       />
       <CustomInput
         label="Email Address"
@@ -153,6 +161,7 @@ const ProfileOverview = ({
           setGalleryPhotoOne={setGalleryPhotoOne}
           setGalleryPhotoTwo={setGalleryPhotoTwo}
           setGalleryPhotoThree={setGalleryPhotoThree}
+          name="gallery"
         />
       </View>
       <CustomSelect

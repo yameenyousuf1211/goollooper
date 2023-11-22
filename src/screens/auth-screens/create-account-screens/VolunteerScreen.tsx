@@ -40,6 +40,9 @@ const VolunteerScreen = ({navigation, route}: any) => {
       }
     };
     fetchServices();
+    if (prevUserData?.volunteer) {
+      setSelectedItems(prevUserData.volunteer);
+    }
   }, []);
 
   const handleSelectItem = (item: IService) => {
@@ -55,7 +58,6 @@ const VolunteerScreen = ({navigation, route}: any) => {
       setSelectedItems(prevItems => [...prevItems, item]);
     }
   };
-  console.log(selectedItems, 'selected');
 
   const handleSubmit = () => {
     const data: Partial<IUser> = {
@@ -68,42 +70,41 @@ const VolunteerScreen = ({navigation, route}: any) => {
     });
   };
   return (
-    <ScrollView>
+    <View
+      style={[
+        globalStlyes.container,
+        {padding: 20, justifyContent: 'space-between', paddingTop: 20},
+      ]}>
       <View
-        style={[
-          globalStlyes.container,
-          {padding: 20, justifyContent: 'space-between', paddingTop: 20},
-        ]}>
+        style={{
+          backgroundColor: '#F9F9F9',
+          padding: 20,
+          width: '100%',
+          gap: 16,
+          borderRadius: 12,
+        }}>
         <View
           style={{
-            backgroundColor: '#F9F9F9',
-            padding: 20,
-            width: '100%',
-            gap: 16,
-            borderRadius: 12,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
-            <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
-              <View
-                style={{
-                  width: 14,
-                  height: 14,
-                  backgroundColor: primaryColor,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <CheckIconTwo />
-              </View>
-              <Text style={globalStlyes.text14}>Volunteer</Text>
+          <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
+            <View
+              style={{
+                width: 14,
+                height: 14,
+                backgroundColor: primaryColor,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <CheckIconTwo />
             </View>
-            <ChevronBottomIconTwo />
+            <Text style={globalStlyes.text14}>Volunteer</Text>
           </View>
-          <View style={{gap: 10, borderRadius: 12}}>
+          <ChevronBottomIconTwo />
+        </View>
+        <ScrollView style={{gap: 10, borderRadius: 12}}>
             {items.map((item: IService) => (
               <TouchableOpacity
                 onPress={() =>
@@ -116,6 +117,7 @@ const VolunteerScreen = ({navigation, route}: any) => {
                   borderRadius: 12,
                   padding: 16,
                   gap: 16,
+                  marginBottom: 10
                 }}>
                 <View
                   style={{
@@ -174,23 +176,22 @@ const VolunteerScreen = ({navigation, route}: any) => {
                 )}
               </TouchableOpacity>
             ))}
-          </View>
-        </View>
-        <View
-          style={{
-            width: '100%',
-            alignItems: 'flex-end',
-            marginTop: verticalScale(140),
-          }}>
-          <CustomButton
-            isDisabled={selectedItems?.length === 0}
-            extraStyles={{width: 77}}
-            onPress={handleSubmit}>
-            Done
-          </CustomButton>
-        </View>
+        </ScrollView>
       </View>
-    </ScrollView>
+      <View
+        style={{
+          width: '100%',
+          alignItems: 'flex-end',
+          marginTop: verticalScale(140),
+        }}>
+        <CustomButton
+          isDisabled={selectedItems?.length === 0}
+          extraStyles={{width: 77}}
+          onPress={handleSubmit}>
+          Done
+        </CustomButton>
+      </View>
+    </View>
   );
 };
 

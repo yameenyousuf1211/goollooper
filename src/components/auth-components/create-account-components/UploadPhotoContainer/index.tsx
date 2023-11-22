@@ -1,15 +1,16 @@
 import React from 'react';
 import {View} from 'react-native';
 import UploadPhoto from './UploadPhoto';
-import {FileData} from '../../../../screens/auth-screens/create-account-screens/CreateProfileScreen';
+import { IFileData } from '../../../../interfaces/user.interface';
 
 interface Props {
-  galleryPhotoOne: FileData | null;
-  galleryPhotoTwo: FileData | null;
-  galleryPhotoThree: FileData | null;
+  galleryPhotoOne: IFileData | null;
+  galleryPhotoTwo: IFileData | null;
+  galleryPhotoThree: IFileData | null;
   setGalleryPhotoOne: any;
   setGalleryPhotoTwo: any;
   setGalleryPhotoThree: any;
+  name: string;
 }
 
 const UploadPhotoContainer = ({
@@ -19,12 +20,13 @@ const UploadPhotoContainer = ({
   setGalleryPhotoOne,
   setGalleryPhotoTwo,
   setGalleryPhotoThree,
+  name
 }: Props) => {
   return (
     <View style={{flexDirection: 'row', gap: 5}}>
-      <UploadPhoto image={galleryPhotoOne} setImage={setGalleryPhotoOne} />
-      <UploadPhoto image={galleryPhotoTwo} setImage={setGalleryPhotoTwo} />
-      <UploadPhoto image={galleryPhotoThree} setImage={setGalleryPhotoThree} />
+      <UploadPhoto image={galleryPhotoOne} setImage={setGalleryPhotoOne} name={name} />
+      <UploadPhoto image={galleryPhotoTwo} setImage={setGalleryPhotoTwo} name={name} />
+      <UploadPhoto image={galleryPhotoThree} setImage={setGalleryPhotoThree} name={name} />
     </View>
   );
 };

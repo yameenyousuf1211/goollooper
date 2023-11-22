@@ -14,7 +14,11 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {useState, useEffect, useCallback} from 'react';
 import {CreateProfileScreenNavigationProp} from '../../../interfaces/navigation.interface';
 import {useDispatch} from 'react-redux';
-import {setBoostType, setuserRole} from '../../../redux/AuthSlice';
+import {
+  setAuthentication,
+  setBoostType,
+  setuserRole,
+} from '../../../redux/AuthSlice';
 
 interface Props {
   title: string;
@@ -25,7 +29,14 @@ interface Props {
   setModal?: any;
 }
 
-const CustomModal = ({title, text, buttonText, route,isCompleteProfile, setModal}: Props) => {
+const CustomModal = ({
+  title,
+  text,
+  buttonText,
+  route,
+  isCompleteProfile,
+  setModal,
+}: Props) => {
   const navigation = useNavigation<CreateProfileScreenNavigationProp>();
   const [isModal, setIsModal] = useState<boolean>(true);
 
@@ -76,6 +87,7 @@ const CustomModal = ({title, text, buttonText, route,isCompleteProfile, setModal
                       if (isCompleteProfile) {
                         dispatch(setBoostType(null));
                         dispatch(setuserRole(null));
+                        dispatch(setAuthentication(true));
                       }
                       navigation.navigate(route as any),
                         setIsModal(false),

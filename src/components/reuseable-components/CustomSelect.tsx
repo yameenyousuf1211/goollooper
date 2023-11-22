@@ -30,7 +30,6 @@ const CustomSelect = ({
   isSingleItem = false,
 }: Props) => {
   const navigation = useNavigation<any>();
-  console.log(value, 'VALIIIIII');
   return (
     <TouchableOpacity
       activeOpacity={0.5}

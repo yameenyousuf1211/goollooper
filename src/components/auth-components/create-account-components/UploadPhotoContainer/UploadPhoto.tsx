@@ -7,12 +7,19 @@ import {
   ImageLibraryOptions,
   launchImageLibrary,
 } from 'react-native-image-picker';
+import {useDispatch, useSelector} from 'react-redux';
+import {setUserData} from '../../../../redux/AuthSlice';
+import {RootState} from '../../../../redux/store';
+import {IUser} from '../../../../interfaces/user.interface';
 interface Props {
   image: FileData | null;
   setImage: any;
+  name: string;
 }
 
-const UploadPhoto = ({image, setImage}: Props) => {
+const UploadPhoto = ({image, setImage, name}: Props) => {
+  const dispatch = useDispatch();
+  const prevUserData = useSelector((state: RootState) => state.auth.user);
   const handleAddImage = async () => {
     const options: ImageLibraryOptions = {
       mediaType: 'photo',
@@ -26,12 +33,35 @@ const UploadPhoto = ({image, setImage}: Props) => {
           name: response.assets[0].fileName,
           type: response.assets[0].type,
         });
+        if (name === 'gallery') {
+          const data: Partial<IUser> = {
+            ...prevUserData,
+            gallery: [
+              ...(prevUserData?.gallery ?? []),
+              {
+                uri: response.assets[0].uri,
+                name: response.assets[0].fileName,
+                type: response.assets[0].type,
+              },
+            ],
+          };
+          dispatch(setUserData(data as IUser));
+        }
       }
     });
   };
-
+  console.log(prevUserData);
   const handleDeleteImage = () => {
     setImage(null);
+    if (name === 'gallery') {
+      const data: Partial<IUser> = {
+        ...prevUserData,
+        gallery: prevUserData?.gallery
+          ? prevUserData?.gallery.filter(deleteImg => deleteImg.uri !== image.uri)
+          : [],
+      };
+      dispatch(setUserData(data as IUser));
+    }
   };
   return (
     <>

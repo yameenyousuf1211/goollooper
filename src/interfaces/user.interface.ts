@@ -53,6 +53,7 @@ export interface IUser {
   gender: string | null;
   age: string | number | null;
   phone: string | number | null;
+  profileImage: IFileData | null;
   role?: IUserRole;
   fcmToken?: string | null;
   volunteer?: [];
@@ -69,7 +70,7 @@ export interface IUserFormErrors {
   gender: string;
   age: string;
   about: string;
-  volunteer: string; 
+  volunteer: string;
 }
 
 /// services and pagination

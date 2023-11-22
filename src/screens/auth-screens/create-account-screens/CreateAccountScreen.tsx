@@ -23,6 +23,8 @@ import {getOtpCode, register} from '../../../api';
 import useLoading from '../../../hooks/useLoading';
 import Toast from 'react-native-toast-message';
 import CustomLoader from '../../../components/reuseable-components/CustomLoader';
+import {setUserData} from '../../../redux/AuthSlice';
+import {useDispatch} from 'react-redux';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -33,6 +35,7 @@ interface FormValues {
 }
 
 const CreateAccountScreen = ({navigation}: any) => {
+  const dispatch = useDispatch();
   const {isLoading, startLoading, stopLoading} = useLoading();
 
   const initialValues: FormValues = {
@@ -52,6 +55,8 @@ const CreateAccountScreen = ({navigation}: any) => {
     try {
       const response = await register(reqData);
       const data = response?.data.data;
+      console.log(data, 'data');
+      dispatch(setUserData(data?.user));
       const otpResponse = await getOtpCode({email: values.email});
       const otpData = otpResponse?.data.data;
       Toast.show({
