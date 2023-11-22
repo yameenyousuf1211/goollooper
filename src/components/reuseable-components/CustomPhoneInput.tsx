@@ -19,6 +19,7 @@ interface Props {
   phoneInput: any;
   setFieldValue: any;
   initialTouched: boolean;
+  setPhoneCode?: any;
   handleChange: () => void;
 }
 const {width, height} = Dimensions.get('screen');
@@ -31,6 +32,7 @@ const CustomPhoneInput = ({
   touched,
   phoneInput,
   setFieldValue,
+  setPhoneCode,
   handleChange,
 }: Props) => {
   const isError = error && ((touched && !value) || (error && value));
@@ -67,7 +69,17 @@ const CustomPhoneInput = ({
         renderDropdownImage={
           <View style={styles.iconContainer}>
             <ChevronBottomIconTwo />
-            <View style={[styles.line,{backgroundColor: value.length > 0 ? 'rgba(22, 26, 29, 0.9)' : 'rgba(22, 26, 29, 0.3)'}]} />
+            <View
+              style={[
+                styles.line,
+                {
+                  backgroundColor:
+                    value.length > 0
+                      ? 'rgba(22, 26, 29, 0.9)'
+                      : 'rgba(22, 26, 29, 0.3)',
+                },
+              ]}
+            />
           </View>
         }
         value={value}
@@ -83,6 +95,7 @@ const CustomPhoneInput = ({
           // setIsError('');
         }}
         onChangeCountry={country => {
+          setPhoneCode(country.callingCode as any);
           phoneInput.current?.setState({number: ''});
           setFieldValue('phone', '');
         }}
@@ -113,7 +126,6 @@ const styles = StyleSheet.create({
     fontFamily: 'SpaceGrotesk-Medium',
     fontSize: 13,
     marginTop: -3,
-
   },
   codeText: {
     fontSize: 13,

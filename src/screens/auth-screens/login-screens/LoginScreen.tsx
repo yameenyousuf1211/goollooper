@@ -26,6 +26,7 @@ import {
   setAccessToken,
   setAuthentication,
   setRefreshToken,
+  setUserData,
 } from '../../../redux/AuthSlice';
 import CustomLoader from '../../../components/reuseable-components/CustomLoader';
 import useLoading from '../../../hooks/useLoading';
@@ -59,8 +60,18 @@ const LoginScreen = ({navigation}: any) => {
         type: 'success',
         text1: `${response?.data.message}`,
       });
-      navigation.navigate('DashboardScreen');
-      dispatch(setAuthentication(true));
+      console.log(data, 'DATA');
+      if (data?.user.isProfileCompleted) {
+        navigation.navigate('DashboardScreen');
+        dispatch(setAuthentication(true));
+      } else {
+        Toast.show({
+          type: 'info',
+          text1: 'Kindly complete your profile to continue!',
+        });
+        navigation.navigate('CreateProfileScreen');
+      }
+      dispatch(setUserData(data.user));
       dispatch(setAccessToken(data?.accessToken));
       dispatch(setRefreshToken(data?.refreshToken));
     } catch (error: any) {

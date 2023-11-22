@@ -1,8 +1,8 @@
 import React from 'react';
-import {AuthStack} from './AuthStack';
+import {AuthStack} from './Auth/AuthStack';
 import {useSelector} from 'react-redux';
 import {RootState} from '../redux/store';
-import {HomeTab} from './HomeTab';
+import {HomeTab} from './Home/HomeTab';
 
 export const Routes = () => {
   const isAuthenticated = useSelector(

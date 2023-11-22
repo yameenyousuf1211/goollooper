@@ -6,15 +6,16 @@ import {useNavigation} from '@react-navigation/native';
 import CustomError from './CustomError';
 import ChevronRightIconTwo from '../../../assets/icons/ChevronRightIconTwo';
 import ChevronRightIcon from '../../../assets/icons/ChevronRightIcon';
+import {IService, ISubService} from '../../interfaces/user.interface';
 
 const {width, height} = Dimensions.get('screen');
 
 interface Props {
   label: string;
   placeholder: string;
-  value: any;
+  value: any | string;
   touched: any;
-  error: any;
+  error: string;
   route: string;
   isSingleItem?: boolean;
 }
@@ -29,6 +30,7 @@ const CustomSelect = ({
   isSingleItem = false,
 }: Props) => {
   const navigation = useNavigation<any>();
+  console.log(value, 'VALIIIIII');
   return (
     <TouchableOpacity
       activeOpacity={0.5}
@@ -44,9 +46,9 @@ const CustomSelect = ({
           paddingBottom: 16,
           position: 'relative',
         }}>
-          <View style={{position: 'absolute',right: 10,bottom:16}}>
-            <ChevronRightIcon />
-          </View>
+        <View style={{position: 'absolute', right: 10, bottom: 16}}>
+          <ChevronRightIcon />
+        </View>
         <Text
           style={{
             color: secondaryTextColor,
@@ -57,21 +59,24 @@ const CustomSelect = ({
         </Text>
         <View style={{flexWrap: 'wrap', flexDirection: 'row', gap: 6}}>
           {value !== '' && !isSingleItem ? (
-            value?.map((value: string) => (
-              <View
-                style={{
-                  backgroundColor: primaryColor,
-                  padding: 10,
-                  borderRadius: 12,
-                }}>
-                <Text
+            value?.map((item: IService) =>
+              item.subServices.map((subItem: ISubService) => (
+                <View
+                  key={subItem._id}
                   style={{
-                    color: 'white',
+                    backgroundColor: primaryColor,
+                    padding: 10,
+                    borderRadius: 12,
                   }}>
-                  {value}
-                </Text>
-              </View>
-            ))
+                  <Text
+                    style={{
+                      color: 'white',
+                    }}>
+                    {subItem.title}
+                  </Text>
+                </View>
+              )),
+            )
           ) : value !== '' && isSingleItem ? (
             <Text
               style={[

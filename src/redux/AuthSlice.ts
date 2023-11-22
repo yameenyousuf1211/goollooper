@@ -1,7 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {IUser} from '../interfaces/user.interface';
+import {IUser, IUserRole} from '../interfaces/user.interface';
 
-export type IUserRole = 'serviceProvider' | null;
 export type IBoostType = 'BSP' | 'MBS' | 'BSL' | 'IW' | null;
 
 interface IAuth {
@@ -29,6 +28,9 @@ const authSlice = createSlice({
     setuserRole: (state, action: PayloadAction<IUserRole>) => {
       state.userRole = action.payload;
     },
+    setUserData: (state, action: PayloadAction<IUser>) => {
+      state.user = action.payload;
+    },
     setBoostType: (state, action: PayloadAction<IBoostType>) => {
       state.boostType = action.payload;
     },
@@ -45,6 +47,7 @@ const authSlice = createSlice({
 });
 
 export const {
+  setUserData,
   setuserRole,
   setBoostType,
   setAuthentication,

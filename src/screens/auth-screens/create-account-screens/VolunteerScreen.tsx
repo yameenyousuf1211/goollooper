@@ -1,27 +1,71 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {globalStlyes} from '../../../styles/GlobalStyles';
 import {primaryColor} from '../../../utils/colors';
 import CheckIconTwo from '../../../../assets/icons/CheckIconTwo';
 import ChevronBottomIcon from '../../../../assets/icons/ChevronBottomIcon';
 import ChevronBottomIconTwo from '../../../../assets/icons/ChevronBottomIconTwo';
-import {VOLUNTEERS_DATA} from '../../../utils/data';
+// import {VOLUNTEERS_item} from '../../../utils/item';
 import ChevronRightIcon from '../../../../assets/icons/ChevronRightIcon';
 import CustomButton from '../../../components/reuseable-components/CustomButton';
 import {verticalScale} from '../../../utils/metrics';
+import {
+  IService,
+  IServiceData,
+  ISubService,
+  IUser,
+} from '../../../interfaces/user.interface';
+import useLoading from '../../../hooks/useLoading';
+import {getServices} from '../../../api';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../../redux/store';
+import {setUserData} from '../../../redux/AuthSlice';
 
 const VolunteerScreen = ({navigation, route}: any) => {
+  const dispatch = useDispatch();
+  const prevUserData = useSelector((state: RootState) => state.auth.user);
   const [activeItemId, setActiveItemId] = useState<string>('');
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const handleSelectItem = (item: string) => {
-    if (selectedItems?.includes(item)) {
-      const filteredItems = selectedItems?.filter(
-        deleteItem => deleteItem !== item,
+  const [items, setItems] = useState<IService[]>([]);
+  const [selectedItems, setSelectedItems] = useState<IService[]>([]);
+  const {isLoading, startLoading, stopLoading} = useLoading();
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await getServices();
+        const services = response?.data?.data?.services;
+        setItems(services);
+      } catch (error: any) {
+        console.log(error?.response?.data, 'ERROR FROM VOLUNTEER SCREEN!');
+      }
+    };
+    fetchServices();
+  }, []);
+
+  const handleSelectItem = (item: IService) => {
+    const filterItem = selectedItems.find(
+      selectedItem => selectedItem._id === item._id,
+    );
+    if (filterItem) {
+      const filteredItems = selectedItems.filter(
+        selectedItem => selectedItem._id !== filterItem._id,
       );
       setSelectedItems(filteredItems);
     } else {
       setSelectedItems(prevItems => [...prevItems, item]);
     }
+  };
+  console.log(selectedItems, 'selected');
+
+  const handleSubmit = () => {
+    const data: Partial<IUser> = {
+      ...prevUserData,
+      volunteer: selectedItems as any,
+    };
+    dispatch(setUserData(data as IUser));
+    navigation.navigate('CreateProfileScreen', {
+      volunteerItems: selectedItems,
+    });
   };
   return (
     <ScrollView>
@@ -60,12 +104,12 @@ const VolunteerScreen = ({navigation, route}: any) => {
             <ChevronBottomIconTwo />
           </View>
           <View style={{gap: 10, borderRadius: 12}}>
-            {VOLUNTEERS_DATA.map(data => (
+            {items.map((item: IService) => (
               <TouchableOpacity
                 onPress={() =>
-                  activeItemId === data?._id
+                  activeItemId === item?._id
                     ? setActiveItemId('')
-                    : setActiveItemId(data?._id)
+                    : setActiveItemId(item?._id)
                 }
                 style={{
                   backgroundColor: '#F2F2F2',
@@ -86,41 +130,46 @@ const VolunteerScreen = ({navigation, route}: any) => {
                         fontFamily: 'SpaceGrotesk-Medium',
                       },
                     ]}>
-                    {data.name}
+                    {item.title}
                   </Text>
-                  {activeItemId.includes(data?._id) ? (
+                  {activeItemId.includes(item?._id) ? (
                     <ChevronBottomIconTwo />
                   ) : (
                     <ChevronRightIcon />
                   )}
                 </View>
-                {activeItemId.includes(data?._id) && data?.types && (
+                {activeItemId.includes(item?._id) && item?.subServices && (
                   <View
                     style={{flexDirection: 'row', flexWrap: 'wrap', gap: 10}}>
-                    {activeItemId.includes(data?._id) &&
-                      data?.types?.map((item: any) => (
-                        <TouchableOpacity
-                          style={{
-                            backgroundColor: selectedItems?.includes(item?.name)
-                              ? primaryColor
-                              : 'transparent',
-                            borderWidth: 1,
-                            borderColor: '#D9D9D9',
-                            padding: 10,
-                            borderRadius: 12,
-                          }}
-                          key={item?._id}
-                          onPress={() => handleSelectItem(item?.name)}>
-                          <Text
+                    {activeItemId.includes(item?._id) &&
+                      item?.subServices?.map((subItem: ISubService) => {
+                        let isSelected = selectedItems.some(selectedItem =>
+                          selectedItem.subServices.some(
+                            (subService: any) => subService._id === subItem._id,
+                          ),
+                        );
+                        return (
+                          <TouchableOpacity
                             style={{
-                              color: selectedItems?.includes(item?.name)
-                                ? 'white'
-                                : '#949494',
-                            }}>
-                            {item?.name}
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
+                              backgroundColor: isSelected
+                                ? primaryColor
+                                : 'transparent',
+                              borderWidth: 1,
+                              borderColor: '#D9D9D9',
+                              padding: 10,
+                              borderRadius: 12,
+                            }}
+                            key={item?._id}
+                            onPress={() => handleSelectItem(item)}>
+                            <Text
+                              style={{
+                                color: isSelected ? 'white' : '#949494',
+                              }}>
+                              {subItem?.title}
+                            </Text>
+                          </TouchableOpacity>
+                        );
+                      })}
                   </View>
                 )}
               </TouchableOpacity>
@@ -131,16 +180,12 @@ const VolunteerScreen = ({navigation, route}: any) => {
           style={{
             width: '100%',
             alignItems: 'flex-end',
-            marginTop:  verticalScale(140),
+            marginTop: verticalScale(140),
           }}>
           <CustomButton
             isDisabled={selectedItems?.length === 0}
             extraStyles={{width: 77}}
-            onPress={() => {
-              navigation.navigate('CreateProfileScreen', {
-                volunteerItems: selectedItems,
-              });
-            }}>
+            onPress={handleSubmit}>
             Done
           </CustomButton>
         </View>

@@ -261,3 +261,108 @@ export const REPEAT_SCHEDULE = [
   {id: 'i4', type: 'Repeat Entire Month'},
   {id: 'i5', type: 'Repeat Entire Year'},
 ];
+
+export const INTERESTS = (types = [
+  {
+    _id: 't1',
+    name: 'Remodeling',
+  },
+  {
+    _id: 't2',
+    name: 'Energy Efficiency',
+  },
+  {
+    _id: 't3',
+    name: 'Green Home Improvement Projects',
+  },
+  {
+    _id: 't4',
+    name: 'Swimming Pools',
+  },
+  {
+    _id: 't5',
+    name: 'Hot Tubs',
+  },
+  {
+    _id: 't6',
+    name: 'Saunas',
+  },
+  {
+    _id: 't7',
+    name: 'Landscaper',
+  },
+]);
+
+export const MATCHED_SERVICE_PROVIDERS = [
+  {
+    id: 'i1',
+    image: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600',
+    name: 'Phillip Bator',
+    distance: '93m away',
+    type: 'Landscaper',
+  },
+  {
+    id: 'i2',
+    image: 'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=600',
+    name: 'Nolan Curtis',
+    distance: '104m away',
+    type: 'Electrical',
+  },
+  {
+    id: 'i3',
+    image: 'https://images.pexels.com/photos/874158/pexels-photo-874158.jpeg?auto=compress&cs=tinysrgb&w=600',
+    name: 'Phillip Bator',
+    distance: '22m away',
+    type: 'Landscaper',
+  },
+  {
+    id: 'i3sad214',
+    image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
+    name: 'Phillip Bator',
+    distance: '222m away',
+    type: 'Landscaper',
+  },
+  {
+    id: 'i323424',
+    image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
+    name: 'Phillip Bator',
+    distance: '222m away',
+    type: 'Landscaper',
+  }, {
+    id: 'i1234',
+    image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
+    name: 'Phillip Bator',
+    distance: '222m away',
+    type: 'Landscaper',
+  }, {
+    id: 'i32dasd14',
+    image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
+    name: 'Phillip Bator',
+    distance: '222m away',
+    type: 'Landscaper',
+  }, {
+    id: 'i32dsadaadasdsada14',
+    image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
+    name: 'Phillip Bator',
+    distance: '222m away',
+    type: 'Landscaper',
+  }, {
+    id: 'i32adsfdasdffds14',
+    image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
+    name: 'Phillip Bator',
+    distance: '222m away',
+    type: 'Landscaper',
+  }, {
+    id: 'i3223342424asdfdcsdfa14',
+    image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
+    name: 'Phillip Bator',
+    distance: '222m away',
+    type: 'Landscaper',
+  }, {
+    id: 'i45wreiwrrjsdfnsfn132',
+    image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
+    name: 'Phillip Bator',
+    distance: '222m away',
+    type: 'Landscaper',
+  },
+];

@@ -1,25 +1,25 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import DashboardScreen from '../screens/dashboard-screens';
-import NoteScreen from '../screens/note-screens';
-import CalendarScreen from '../screens/calendar-screens';
-import MessagesScreen from '../screens/messages-screens';
-import HomeIcon from '../../assets/icons/HomeIcon';
-import NoteIcon from '../../assets/icons/NoteIcon';
+import DashboardScreen from '../../screens/dashboard-screens';
+import NoteScreen from '../../screens/note-screens';
+import CalendarScreen from '../../screens/calendar-screens';
+import MessagesScreen from '../../screens/messages-screens';
+import HomeIcon from '../../../assets/icons/HomeIcon';
+import NoteIcon from '../../../assets/icons/NoteIcon';
 import Icon from 'react-native-vector-icons/Ionicons';
-import CalendarIcon from '../../assets/icons/CalendarIcon';
-import MessageIcon from '../../assets/icons/MessageIcon';
-import {primaryColor} from '../utils/colors';
-import FillHomeIcon from '../../assets/icons/FillHomeIcon';
-import FillNoteIcon from '../../assets/icons/FillNoteIcon';
-import FillCalendarIcon from '../../assets/icons/FillCalendarIcon';
-import FillMessagesIcon from '../../assets/icons/FillMessagesIcon';
-import CreateListScreen from '../screens/create-list-screens';
+import CalendarIcon from '../../../assets/icons/CalendarIcon';
+import MessageIcon from '../../../assets/icons/MessageIcon';
+import {primaryColor} from '../../utils/colors';
+import FillHomeIcon from '../../../assets/icons/FillHomeIcon';
+import FillNoteIcon from '../../../assets/icons/FillNoteIcon';
+import FillCalendarIcon from '../../../assets/icons/FillCalendarIcon';
+import FillMessagesIcon from '../../../assets/icons/FillMessagesIcon';
+import CreateListScreen from '../../screens/create-list-screens';
 import {View, StyleSheet} from 'react-native';
+import {HomeStack} from './HomeStack';
 
 const Tab = createBottomTabNavigator();
 
 export const HomeTab = () => {
-  
   const CustomIcon = ({focused, name}: {focused: boolean; name: string}) => {
     if (name === 'dashboard') {
       return focused ? <FillHomeIcon /> : <HomeIcon />;
@@ -47,8 +47,9 @@ export const HomeTab = () => {
         headerTintColor: '#161A1D',
         headerTitleAlign: 'center',
         headerStyle: {
-          height: 50,
+          height: 75,
           borderBottomWidth: 1,
+          backgroundColor: 'rgba(255, 255, 255, 1)',
         },
         headerTitleStyle: {
           fontSize: 14,
@@ -57,9 +58,10 @@ export const HomeTab = () => {
       }}>
       <Tab.Screen
         name="DashboardScreen"
-        component={DashboardScreen}
+        component={HomeStack}
         options={{
           title: '',
+          headerShown: false,
           tabBarIcon: ({focused}) => (
             <CustomIcon name="dashboard" focused={focused} />
           ),

@@ -64,9 +64,16 @@ const CustomInput = ({...props}: Props) => {
       <TextInput
         style={[
           styles.input,
-          {borderBottomColor: isError ? redColor : '#EDEDED'},
+          {
+            borderBottomColor: isError ? redColor : '#EDEDED',
+            backgroundColor: props.isDisable ? '#EDEDED' : undefined,
+            marginTop: props.isDisable ? 10 : undefined,
+            paddingTop: props.isDisable ? 14 : undefined,
+
+          },
           props.extraStyles,
         ]}
+        editable={!props.isDisable}
         placeholderTextColor="rgba(22, 26, 29, 0.3)"
         textAlignVertical="top"
         placeholder={props?.placeholder ? props?.placeholder : 'Type here'}
@@ -74,7 +81,7 @@ const CustomInput = ({...props}: Props) => {
         keyboardType={props.keyboardType}
         autoCapitalize={props.autoCapitalize}
         value={props.value}
-        maxLength={120} // Set maximum length
+        maxLength={120}
         onChangeText={handleChangeText}
         onFocus={handleInputFocus}
         multiline={props?.isTextArea ? true : false}
@@ -118,5 +125,6 @@ export const styles = StyleSheet.create({
     fontFamily: 'SpaceGrotesk-Medium',
     fontSize: 14,
     paddingRight: 30,
+    borderRadius: 12,
   },
 });

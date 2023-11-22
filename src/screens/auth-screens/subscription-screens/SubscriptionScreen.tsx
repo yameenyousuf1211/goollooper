@@ -1,12 +1,5 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {globalStlyes} from '../../../styles/GlobalStyles';
 import SubscriptionTitle from '../../../components/auth-components/SubscriptionTitle';
 import {SERVICE_PROVIDERS} from '../../../utils/data';

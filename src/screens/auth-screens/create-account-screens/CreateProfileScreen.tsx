@@ -28,57 +28,48 @@ import LiabilityInsurance from '../../../components/auth-components/create-accou
 import BoostProfile from '../../../components/auth-components/BoostProfile';
 import {RootState} from '../../../redux/store';
 import {useSelector, useDispatch} from 'react-redux';
-import {setAuthentication, setuserRole} from '../../../redux/AuthSlice';
+import {
+  setAuthentication,
+  setUserData,
+  setuserRole,
+} from '../../../redux/AuthSlice';
+import {
+  IFileData,
+  IService,
+  ISubService,
+  IUser,
+  IUserFormErrors,
+} from '../../../interfaces/user.interface';
+import Toast from 'react-native-toast-message';
+import {updateProfile} from '../../../api';
 
 const {width, height} = Dimensions.get('screen');
-
-export type FileData = {
-  uri: string;
-  name: string;
-  type: string;
+const initialValues: IUser = {
+  firstName: '',
+  lastName: '',
+  userName: '',
+  email: '',
+  phone: '',
+  gender: '',
+  age: '',
+  about: '',
+  volunteer: [],
 };
-
-interface FormValues {
-  firstName: string;
-  lastName: string;
-  email: string;
-  username: string;
-  phone: string;
-  about: string;
-  gender: string;
-  age: string;
-  volunteer: string;
-  serviceProviderSpeciality: string;
-  addSchedule: string;
-  // brand
-  registration: string;
-  websiteUrl: string;
-  affiliations: string;
-  publications: string;
-  resume: string;
-
-  // location
-  state: string;
-  city: string;
-  country: string;
-
-  //reference
-  name: string;
-  contactInfo: string;
-}
 
 const CreateProfileScreen = ({navigation}: any) => {
   const boostType = useSelector((state: RootState) => state.auth.boostType);
   const userRole = useSelector((state: RootState) => state.auth.userRole);
+  const userData = useSelector((state: RootState) => state.auth.user);
 
   const dispatch = useDispatch();
 
   const [isProfileOverview, setIsProfileOverview] = useState<boolean>(false);
-  const [profilePicture, setProfilePicture] = useState<FileData | null>(null);
+  const [profilePicture, setProfilePicture] = useState<IFileData | null>(null);
   const [isProfileCompleted, setIsProfileCompleted] = useState<boolean>(false);
   const [selectedProfileOptions, setSelectedProfileOptions] = useState<
     string[]
   >([]);
+  const [phoneCode, setPhoneCode] = useState<string>('');
 
   const handleSelectProfileOption = (id: string) => {
     if (id === 'p1') {
@@ -91,46 +82,41 @@ const CreateProfileScreen = ({navigation}: any) => {
       const filterOptions = selectedProfileOptions.filter(
         (option: any) => option !== id,
       );
-      console.log(filterOptions, 'filter');
       setSelectedProfileOptions(filterOptions);
     } else {
       setSelectedProfileOptions((prev: any) => [...prev, id]);
     }
   };
 
-  const initialValues: FormValues = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    username: '',
-    phone: '',
-    about: '',
-    gender: '',
-    age: '',
-    volunteer: '',
-    serviceProviderSpeciality: '',
-    addSchedule: '',
-    // company
-    registration: '',
-    websiteUrl: '',
-    affiliations: '',
-    publications: '',
-    resume: '',
-
-    // loc
-
-    state: '',
-    city: '',
-    country: '',
-    // reference
-    name: '',
-    contactInfo: '',
-  };
-
-  const handleSubmit = (values: FormValues) => {
-    console.log(values, 'Values');
-    setIsProfileCompleted(true);
-    dispatch(setAuthentication(true));
+  const handleSubmit = async (values: IUser) => {
+    const volunteerItems = userData?.volunteer?.flatMap((item: IService) =>
+      item.subServices.map((subItem: ISubService) => ({
+        service: item._id,
+        subService: subItem._id,
+      })),
+    );
+    const reqData: Partial<IUser> = {
+      ...userData,
+      ...values,
+      email: userData?.email,
+      phone: `+${phoneCode}${values.phone}`,
+      volunteer: volunteerItems as any,
+      isProfileCompleted: true,
+    };
+    try {
+      const response = await updateProfile(reqData as IUser);
+      const data = response?.data.data;
+      console.log(response?.data?.message, 'DATA');
+      Toast.show({
+        type: 'success',
+        text1: `${response?.data?.message}`,
+      });
+      setIsProfileCompleted(true);
+      dispatch(setUserData(data));
+      dispatch(setAuthentication(true));
+    } catch (error: any) {
+      console.log(error?.response?.data);
+    }
   };
 
   return (
@@ -212,11 +198,13 @@ const CreateProfileScreen = ({navigation}: any) => {
                             {selectedProfileOptions.includes(profile.id) &&
                               profile.name === 'Profile Overview' && (
                                 <ProfileOverview
-                                  values={values}
-                                  errors={errors}
+                                  values={values as IUser}
+                                  errors={errors as IUserFormErrors}
                                   boostType={boostType}
                                   userRole={userRole}
                                   touched={touched}
+                                  setPhoneCode={setPhoneCode}
+                                  userData={userData as IUser}
                                   setFieldValue={setFieldValue}
                                   handleChange={handleChange}
                                 />
@@ -297,11 +285,13 @@ const CreateProfileScreen = ({navigation}: any) => {
                             {selectedProfileOptions.includes(profile.id) &&
                               profile.name === 'Profile Overview' && (
                                 <ProfileOverview
-                                  values={values}
-                                  errors={errors}
+                                  values={values as IUser}
+                                  errors={errors as IUserFormErrors}
                                   boostType={boostType}
                                   userRole={userRole}
+                                  userData={userData as IUser}
                                   touched={touched}
+                                  setPhoneCode={setPhoneCode}
                                   setFieldValue={setFieldValue}
                                   handleChange={handleChange}
                                 />
@@ -354,10 +344,10 @@ const CreateProfileScreen = ({navigation}: any) => {
                           alignItems: 'center',
                         }}
                         onPress={() => {
-                          if (userRole === 'serviceProvider') {
+                          if (userRole === 'service_provider') {
                             dispatch(setuserRole(null));
                           } else {
-                            dispatch(setuserRole('serviceProvider'));
+                            dispatch(setuserRole('service_provider'));
                           }
                         }}>
                         <View
@@ -376,7 +366,7 @@ const CreateProfileScreen = ({navigation}: any) => {
                         </Text>
                       </TouchableOpacity>
                     )}
-                    {userRole === 'serviceProvider' && boostType == null && (
+                    {userRole === 'service_provider' && boostType == null && (
                       <BoostProfile
                         onBoostProfile={() =>
                           navigation.navigate('SubscriptionScreen')
