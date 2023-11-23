@@ -1,14 +1,26 @@
-import React, {useState} from 'react';
-import { StyleSheet, Text, View} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import {globalStlyes} from '../../../../styles/GlobalStyles';
 import {CITY, COUNTRY, STATE} from '../../../../utils/data';
 import {TouchableOpacity} from 'react-native';
 import {primaryColor} from '../../../../utils/colors';
 import CheckIconTwo from '../../../../../assets/icons/CheckIconTwo';
 import CustomButton from '../../../../components/reuseable-components/CustomButton';
+import {useDispatch, useSelector} from 'react-redux';
+import {IUser} from '../../../../interfaces/user.interface';
+import {setUserData} from '../../../../redux/AuthSlice';
+import { RootState } from '../../../../redux/store';
 
 const CountryScreen = ({navigation}: any) => {
+  const dispatch = useDispatch();
+  const prevUserData = useSelector((state: RootState) => state.auth.user);
   const [selectedOption, setSelectedOption] = useState<string>('');
+
+  useEffect(() => {
+    if (prevUserData?.country) {
+      setSelectedOption(prevUserData.country);
+    }
+  }, []);
 
   const handleSelectOption = (name: string) => {
     if (selectedOption === name) {
@@ -16,6 +28,15 @@ const CountryScreen = ({navigation}: any) => {
     } else {
       setSelectedOption(name);
     }
+  };
+
+  const handleSubmit = () => {
+    const data: Partial<IUser> = {
+      ...prevUserData,
+      country: selectedOption,
+    };
+    dispatch(setUserData(data as IUser));
+    navigation.navigate('CreateProfileScreen');
   };
 
   return (
@@ -35,12 +56,12 @@ const CountryScreen = ({navigation}: any) => {
           <Text style={globalStlyes.text14}>Select Country</Text>
           <View style={{gap: 12}}>
             {COUNTRY.map((item: any) => {
-              let isSelected = selectedOption.includes(item.id);
+              let isSelected = selectedOption.includes(item.name);
               return (
                 <TouchableOpacity
                   key={item.id}
                   style={styles.itemContainer}
-                  onPress={() => handleSelectOption(item.id)}>
+                  onPress={() => handleSelectOption(item.name)}>
                   <View
                     style={[
                       styles.iconContainer,
@@ -72,7 +93,7 @@ const CountryScreen = ({navigation}: any) => {
           <CustomButton
             isDisabled={selectedOption === ''}
             extraStyles={{width: 77}}
-            onPress={() => navigation.navigate('CreateProfileScreen')}>
+            onPress={handleSubmit}>
             Done
           </CustomButton>
         </View>

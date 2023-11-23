@@ -28,11 +28,7 @@ import LiabilityInsurance from '../../../components/auth-components/create-accou
 import BoostProfile from '../../../components/auth-components/BoostProfile';
 import {RootState} from '../../../redux/store';
 import {useSelector, useDispatch} from 'react-redux';
-import {
-  setAuthentication,
-  setUserData,
-  setuserRole,
-} from '../../../redux/AuthSlice';
+import {setuserRole} from '../../../redux/AuthSlice';
 import {
   IFileData,
   IService,
@@ -56,6 +52,19 @@ const initialValues: IUser = {
   age: '',
   about: '',
   volunteer: [],
+  State: '',
+  city: '',
+  country: '',
+  company: {
+    companyName: '',
+    publication: '',
+    affiliation: '',
+    website: '',
+  },
+  reference: {
+    referenceName: '',
+    contact: '',
+  },
 };
 
 const CreateProfileScreen = ({navigation}: any) => {
@@ -92,6 +101,7 @@ const CreateProfileScreen = ({navigation}: any) => {
   };
 
   const handleSubmit = async (values: IUser) => {
+    console.log(values, 'FORM SUBMIT VALUES!');
     startLoading();
     const volunteerItems = userData?.volunteer?.flatMap((item: IService) =>
       item.subServices.map((subItem: ISubService) => ({
@@ -107,7 +117,7 @@ const CreateProfileScreen = ({navigation}: any) => {
       email: userData?.email,
       phone: `+${phoneCode}${values.phone}`,
       volunteer: volunteerItems as any,
-      isProfileCompleted: true,
+      isProfileCompleted: false,
     };
     console.log(reqData, 'REQDATA');
     try {
@@ -206,7 +216,7 @@ const CreateProfileScreen = ({navigation}: any) => {
                               profile.name === 'Profile Overview' && (
                                 <ProfileOverview
                                   values={values as IUser}
-                                  errors={errors as IUserFormErrors}
+                                  errors={errors as IUserFormErrors} // Explicit cast here
                                   boostType={boostType}
                                   userRole={userRole}
                                   touched={touched}
@@ -216,15 +226,15 @@ const CreateProfileScreen = ({navigation}: any) => {
                                   handleChange={handleChange}
                                 />
                               )}
-                            {selectedProfileOptions.includes(profile.id) &&
+                            {/* {selectedProfileOptions.includes(profile.id) &&
                               profile.name === 'Visual Validation' && (
                                 <VisualValidationForm />
                               )}
                             {selectedProfileOptions.includes(profile.id) &&
                               profile.name === 'Brand Information' && (
                                 <BrandInfoForm
-                                  values={values}
-                                  errors={errors}
+                                  values={values as IUser}
+                                  errors={errors as IUserFormErrors}
                                   touched={touched}
                                   setFieldValue={setFieldValue}
                                   handleChange={handleChange}
@@ -251,7 +261,7 @@ const CreateProfileScreen = ({navigation}: any) => {
                               profile.name ===
                                 'Liability Insurance / Certification of Insurance' && (
                                 <LiabilityInsurance />
-                              )}
+                              )} */}
                           </>
                         );
                       })}
@@ -310,8 +320,8 @@ const CreateProfileScreen = ({navigation}: any) => {
                             {selectedProfileOptions.includes(profile.id) &&
                               profile.name === 'Brand Information' && (
                                 <BrandInfoForm
-                                  values={values}
-                                  errors={errors}
+                                  values={values as IUser}
+                                  errors={errors as IUserFormErrors}
                                   touched={touched}
                                   setFieldValue={setFieldValue}
                                   handleChange={handleChange}
@@ -327,8 +337,8 @@ const CreateProfileScreen = ({navigation}: any) => {
                             {selectedProfileOptions.includes(profile.id) &&
                               profile.name === 'Reference' && (
                                 <Reference
-                                  values={values}
-                                  errors={errors}
+                                  values={values as IUser}
+                                  errors={errors as IUserFormErrors}
                                   touched={touched}
                                   setFieldValue={setFieldValue}
                                   handleChange={handleChange}
@@ -361,11 +371,13 @@ const CreateProfileScreen = ({navigation}: any) => {
                           style={{
                             width: 14,
                             height: 14,
-                            borderWidth: userRole === "service_provider" ? undefined : 1,
+                            borderWidth:
+                              userRole === 'service_provider' ? undefined : 1,
                             borderColor: '#B9BABB',
-                            backgroundColor: userRole === "service_provider"
-                              ? primaryColor
-                              : undefined,
+                            backgroundColor:
+                              userRole === 'service_provider'
+                                ? primaryColor
+                                : undefined,
                           }}
                         />
                         <Text style={globalStlyes.text14}>

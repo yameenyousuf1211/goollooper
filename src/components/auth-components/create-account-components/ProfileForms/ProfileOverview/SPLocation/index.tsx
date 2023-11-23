@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {primaryColor, secondaryTextColor} from '../../../../../../utils/colors';
 import CheckIconTwo from '../../../../../../../assets/icons/CheckIconTwo';
@@ -7,25 +7,66 @@ import CustomInput from '../../../../../reuseable-components/CustomInput';
 import CustomSelect from '../../../../../reuseable-components/CustomSelect';
 import LocationIcon from '../../../../../../../assets/icons/LocationIcon';
 import {useNavigation} from '@react-navigation/native';
+import {
+  ILocationType,
+  IUser,
+} from '../../../../../../interfaces/user.interface';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../../../../../redux/store';
+import {setUserData} from '../../../../../../redux/AuthSlice';
 
 interface Props {
-  values: any;
+  values: IUser;
   errors: any;
   touched: any;
+  setFieldValue: any;
   handleChange: any;
 }
 
-const SPLocation = ({values, errors, touched,handleChange}: Props) => {
+const SPLocation = ({
+  values,
+  errors,
+  touched,
+  setFieldValue,
+  handleChange,
+}: Props) => {
+  const dispatch = useDispatch();
+  const userData = useSelector((state: RootState) => state.auth.user);
   const navigation = useNavigation<any>();
   const [selectedOption, setSelectedOption] = useState<string>('');
 
-  const handleSelectOption = (name: string) => {
+  const handleSelectOption = (name: ILocationType) => {
     if (selectedOption === name) {
       setSelectedOption('');
+      const data: Partial<IUser> = {
+        ...userData,
+        locationType: null,
+      };
+      dispatch(setUserData(data as IUser));
+      navigation.navigate('CreateProfileScreen');
     } else {
       setSelectedOption(name);
+      const data: Partial<IUser> = {
+        ...userData,
+        locationType: name,
+      };
+      dispatch(setUserData(data as IUser));
+      navigation.navigate('CreateProfileScreen');
     }
   };
+
+  useEffect(() => {
+    if (userData?.State) {
+      setFieldValue('State', userData?.State);
+    }
+    if (userData?.city) {
+      setFieldValue('city', userData?.city);
+    }
+    if (userData?.country) {
+      setFieldValue('country', userData?.country);
+    }
+  }, [userData]);
+
   return (
     <View style={{gap: 16}}>
       <Text
@@ -39,14 +80,14 @@ const SPLocation = ({values, errors, touched,handleChange}: Props) => {
       <View style={styles.innerContainer}>
         <TouchableOpacity
           style={styles.itemContainer}
-          onPress={() => handleSelectOption('Universal')}>
+          onPress={() => handleSelectOption('global')}>
           <View
             style={[
               styles.iconContainer,
               {
-                borderWidth: selectedOption.includes('Universal') ? 0 : 1,
+                borderWidth: selectedOption.includes('global') ? 0 : 1,
                 borderColor: '#B9BABB',
-                backgroundColor: selectedOption.includes('Universal')
+                backgroundColor: selectedOption.includes('global')
                   ? primaryColor
                   : 'transparent',
               },
@@ -57,14 +98,14 @@ const SPLocation = ({values, errors, touched,handleChange}: Props) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.itemContainer}
-          onPress={() => handleSelectOption('Local')}>
+          onPress={() => handleSelectOption('local')}>
           <View
             style={[
               styles.iconContainer,
               {
-                borderWidth: selectedOption.includes('Local') ? 0 : 1,
+                borderWidth: selectedOption.includes('local') ? 0 : 1,
                 borderColor: '#B9BABB',
-                backgroundColor: selectedOption.includes('Local')
+                backgroundColor: selectedOption.includes('local')
                   ? primaryColor
                   : 'transparent',
               },
@@ -73,7 +114,7 @@ const SPLocation = ({values, errors, touched,handleChange}: Props) => {
           </View>
           <Text style={globalStlyes.text14}>Local</Text>
         </TouchableOpacity>
-        {selectedOption == 'Local' && (
+        {selectedOption == 'local' && (
           <View style={{marginTop: 10}}>
             <View style={{position: 'relative'}}>
               <CustomInput
@@ -91,31 +132,36 @@ const SPLocation = ({values, errors, touched,handleChange}: Props) => {
             <CustomSelect
               label="State"
               placeholder="Select"
-              value={values.state}
-              error={errors.state}
-              touched={touched.state}
+              value={values.State as string}
+              error={errors.State}
+              touched={touched.State}
               route="StateScreen"
+              isSingleItem={true}
             />
             <CustomSelect
               label="City"
               placeholder="Select"
-              value={values.city}
+              value={values.city as string}
               error={errors.city}
+              isSingleItem={true}
               touched={touched.city}
               route="CityScreen"
             />
             <CustomSelect
               label="Country"
               placeholder="Select"
-              value={values.country}
+              value={values.country as string}
               error={errors.country}
               touched={touched.country}
               route="CountryScreen"
+              isSingleItem={true}
             />
+
             <CustomSelect
               label="Zip Code"
               placeholder="Select"
-              value={values.state}
+              isSingleItem={true}
+              value={userData?.zipCode && userData?.zipCode[0]?.code}
               error={errors.state}
               touched={touched.state}
               route="ZipcodeScreen"

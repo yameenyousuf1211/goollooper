@@ -99,7 +99,7 @@ const VerificationScreen = ({navigation, route}: any) => {
             }}>
             <View style={{gap: height * 0.038}}>
               <View>
-                <Text style={styles.pageHeading}>Verifications</Text>
+                <Text style={styles.pageHeading}>Verification</Text>
               </View>
               <View>
                 <Text
@@ -174,7 +174,7 @@ const VerificationScreen = ({navigation, route}: any) => {
                     fontSize: width * 0.032,
                     fontFamily: 'SpaceGrotesk-Regular',
                   }}>
-                  Didn't recieve code?{' '}
+                  Didn't receive code?{' '}
                 </Text>
                 <TouchableOpacity>
                   <Text

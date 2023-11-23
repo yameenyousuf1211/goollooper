@@ -25,6 +25,7 @@ import Toast from 'react-native-toast-message';
 import CustomLoader from '../../../components/reuseable-components/CustomLoader';
 import {setUserData} from '../../../redux/AuthSlice';
 import {useDispatch} from 'react-redux';
+import { globalStlyes } from '../../../styles/GlobalStyles';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -106,7 +107,7 @@ const CreateAccountScreen = ({navigation}: any) => {
                     fontFamily: 'SpaceGrotesk-Medium',
                     fontSize: width * 0.05,
                   }}>
-                  Welcome Back To Goollooper
+                  Welcome Back To Goollooper!
                 </Text>
               </View>
             </View>
@@ -137,7 +138,7 @@ const CreateAccountScreen = ({navigation}: any) => {
                       isShowPasswordIcon={true}
                     />
                     <CustomInput
-                      label="Re-Type Password"
+                      label="Re-Enter Password"
                       value={values.confirmPassword}
                       error={errors.confirmPassword}
                       touched={touched.confirmPassword}
@@ -168,7 +169,7 @@ const CreateAccountScreen = ({navigation}: any) => {
                 style={{width: '40%', height: 1, backgroundColor: '#EDEDED'}}
               />
               <View>
-                <Text>or</Text>
+              <Text style={[globalStlyes.text14,{color:'rgba(162, 160, 168, 1)'}]}>or</Text>
               </View>
               <View
                 style={{width: '40%', height: 1, backgroundColor: '#EDEDED'}}

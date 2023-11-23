@@ -12,15 +12,15 @@ export type IFileData = {
 };
 
 export type ICompany = {
-  name: string | null;
-  logo: IFileData | null;
+  companyName?: string | null;
+  logo?: IFileData | null;
   website: string | null;
   affiliation: string | null;
-  publication: null;
-  resume: string | null;
+  publication: string | null;
+  resume?: string | null;
 };
 export type IReference = {
-  name: string | null;
+  referenceName: string | null;
   contact: string | null;
 };
 
@@ -29,6 +29,13 @@ export type IServiceData = {
   subService: string;
 };
 
+// export type IZipCode = {
+//   code: string;
+//   isSelected: boolean;
+// };
+
+export type ILocationType = 'local' | 'global';
+
 export interface IUser {
   location?: ILocation;
   company?: ICompany;
@@ -36,8 +43,8 @@ export interface IUser {
   userName: string | null;
   gallery?: IFileData[];
   about: string | null;
-  locationType?: 'local';
-  state?: string | null;
+  locationType?: ILocationType | null;
+  State?: string | null;
   city?: string | null;
   country?: string | null;
   visuals?: IFileData[];
@@ -53,12 +60,12 @@ export interface IUser {
   gender: string | null;
   age: string | number | null;
   phone: string | number | null;
-  profileImage: IFileData | null;
+  profileImage?: IFileData | null;
   role?: IUserRole;
   fcmToken?: string | null;
   volunteer?: [];
   services?: [];
-  zipCode?: [];
+  zipCode?: [{code: string | null; isSelected: boolean}];
 }
 
 export interface IUserFormErrors {
@@ -71,6 +78,16 @@ export interface IUserFormErrors {
   age: string;
   about: string;
   volunteer: string;
+  company?: {
+    companyName: string;
+    website: string;
+    affiliation: string;
+    publication: string;
+  };
+  reference?: {
+    referenceName: string;
+    contact: string;
+  };
 }
 
 /// services and pagination

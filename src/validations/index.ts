@@ -7,13 +7,12 @@ const email = Yup.string()
   )
   .required('Email is required');
 
-  
 const notRequiredEmail = Yup.string()
-.matches(
-  /^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
-  'Invalid email',
-)
-.notRequired();
+  .matches(
+    /^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+    'Invalid email',
+  )
+  .notRequired();
 
 export const loginSchema = Yup.object().shape({
   email: email,
@@ -69,5 +68,33 @@ export const createProfileSchema = Yup.object().shape({
     .min(15, 'Age must be greater than 14'),
   about: Yup.string().required('About is required'),
   volunteer: Yup.array().required('Volunteer is required'),
+
   // serviceProviderSpeciality: Yup.array().notRequired(),
+  // company validations
+  companyName: Yup.string()
+    .notRequired()
+    .matches(/^[A-Za-z]+$/, 'Invalid Last Name') // Ensures no spaces in the name
+    .min(3, 'Last Name must be at least 3 characters long'),
+  website: Yup.string()
+    .notRequired()
+    .matches(/^[A-Za-z]+$/, 'Invalid Last Name') // Ensures no spaces in the name
+    .min(3, 'Website must be at least 3 characters long'),
+  affiliation: Yup.string()
+    .notRequired()
+    .matches(/^[A-Za-z]+$/, 'Invalid Last Name') // Ensures no spaces in the name
+    .min(3, 'Affiliation must be at least 3 characters long'),
+  publication: Yup.string()
+    .notRequired()
+    .matches(/^[A-Za-z]+$/, 'Invalid Last Name') // Ensures no spaces in the name
+    .min(3, 'Publication must be at least 3 characters long'),
+
+  // reference validations
+  referenceName: Yup.string()
+    .notRequired()
+    .matches(/^[A-Za-z]+$/, 'Invalid Last Name') // Ensures no spaces in the name
+    .min(3, 'Reference Name must be at least 3 characters long'),
+  contact: Yup.string()
+    .notRequired()
+    .matches(/^[A-Za-z]+$/, 'Invalid Last Name') // Ensures no spaces in the name
+    .min(3, 'Contact Name must be at least 3 characters long'),
 });

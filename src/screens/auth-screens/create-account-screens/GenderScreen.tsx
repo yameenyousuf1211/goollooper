@@ -19,6 +19,7 @@ const GenderScreen = ({navigation}: any) => {
       setSelectedItem(prevUserData.gender);
     }
   }, []);
+  
   const handleSelectItem = (item: string) => {
     if (selectedItem?.includes(item)) {
       setSelectedItem('');

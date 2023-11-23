@@ -3,7 +3,6 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {globalStlyes} from '../../../styles/GlobalStyles';
 import SubscriptionTitle from '../../../components/auth-components/SubscriptionTitle';
 import SubscriptionCard from '../../../components/auth-components/SubscriptionCard';
-import {MBS_SUBS} from '../../../utils/data';
 import CustomButton from '../../../components/reuseable-components/CustomButton';
 import {verticalScale} from '../../../utils/metrics';
 import {useDispatch} from 'react-redux';

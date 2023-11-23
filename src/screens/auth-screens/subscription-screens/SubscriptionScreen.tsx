@@ -2,7 +2,6 @@ import React, {useCallback, useState, useEffect} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {globalStlyes} from '../../../styles/GlobalStyles';
 import SubscriptionTitle from '../../../components/auth-components/SubscriptionTitle';
-import {SERVICE_PROVIDERS} from '../../../utils/data';
 import SubscriptionCard from '../../../components/auth-components/SubscriptionCard';
 import CustomModal from '../../../components/modals/CustomBottomModal';
 import {useFocusEffect} from '@react-navigation/native';

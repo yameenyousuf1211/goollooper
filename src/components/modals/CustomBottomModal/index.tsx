@@ -12,6 +12,7 @@ import {globalStlyes} from '../../../styles/GlobalStyles';
 import CustomButton from '../../reuseable-components/CustomButton';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {useState, useEffect, useCallback} from 'react';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {CreateProfileScreenNavigationProp} from '../../../interfaces/navigation.interface';
 import {useDispatch} from 'react-redux';
 import {
@@ -19,6 +20,7 @@ import {
   setBoostType,
   setuserRole,
 } from '../../../redux/AuthSlice';
+import { primaryColor } from '../../../utils/colors';
 
 interface Props {
   title: string;
@@ -67,7 +69,8 @@ const CustomModal = ({
               onPress={() => console.log('Inner view pressed')}>
               <View style={styles.modalInnerContainer}>
                 <View style={styles.iconContainer}>
-                  <CheckIcon />
+                  {/* <CheckIcon /> */}
+                  <Icon name="checkmark-outline" style={{fontWeight: '900'}} size={24} color={primaryColor}></Icon>
                 </View>
                 <View
                   style={{

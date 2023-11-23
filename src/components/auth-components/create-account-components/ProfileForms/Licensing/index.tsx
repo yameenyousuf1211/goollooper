@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import {FileData} from '../../../../../screens/auth-screens/create-account-screens/CreateProfileScreen';
 import UploadPhotoContainer from '../../UploadPhotoContainer';
+import { IFileData } from '../../../../../interfaces/user.interface';
 
 const Licensing = () => {
-  const [galleryPhotoOne, setGalleryPhotoOne] = useState<FileData | null>(null);
-  const [galleryPhotoTwo, setGalleryPhotoTwo] = useState<FileData | null>(null);
-  const [galleryPhotoThree, setGalleryPhotoThree] = useState<FileData | null>(
+  const [galleryPhotoOne, setGalleryPhotoOne] = useState<IFileData | null>(null);
+  const [galleryPhotoTwo, setGalleryPhotoTwo] = useState<IFileData | null>(null);
+  const [galleryPhotoThree, setGalleryPhotoThree] = useState<IFileData | null>(
     null,
   );
   return (
@@ -16,6 +16,7 @@ const Licensing = () => {
       setGalleryPhotoOne={setGalleryPhotoOne}
       setGalleryPhotoTwo={setGalleryPhotoTwo}
       setGalleryPhotoThree={setGalleryPhotoThree}
+      name='licenses'
     />
   );
 };

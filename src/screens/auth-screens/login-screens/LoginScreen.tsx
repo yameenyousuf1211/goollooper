@@ -30,6 +30,7 @@ import {
 } from '../../../redux/AuthSlice';
 import CustomLoader from '../../../components/reuseable-components/CustomLoader';
 import useLoading from '../../../hooks/useLoading';
+import { globalStlyes } from '../../../styles/GlobalStyles';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -179,7 +180,7 @@ const LoginScreen = ({navigation}: any) => {
                 style={{width: '40%', height: 1, backgroundColor: '#EDEDED'}}
               />
               <View>
-                <Text>or</Text>
+                <Text style={[globalStlyes.text14,{color:'rgba(162, 160, 168, 1)'}]}>or</Text>
               </View>
               <View
                 style={{width: '40%', height: 1, backgroundColor: '#EDEDED'}}
@@ -210,7 +211,7 @@ const LoginScreen = ({navigation}: any) => {
                         fontFamily: 'SpaceGrotesk-Regular',
                         fontSize: width * 0.032,
                       }}>
-                      CreateAccount
+                      Create Account
                     </Text>
                   </TouchableOpacity>
                 </View>

@@ -3,11 +3,17 @@ import {Text, View} from 'react-native';
 import CustomInput from '../../../../reuseable-components/CustomInput';
 import {globalStlyes} from '../../../../../styles/GlobalStyles';
 import UploadProfile from '../../UploadProfile';
-import {FileData} from '../../../../../screens/auth-screens/create-account-screens/CreateProfileScreen';
+import {
+  IFileData,
+  IUser,
+  IUserFormErrors,
+} from '../../../../../interfaces/user.interface';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../../../redux/store';
 
 interface Props {
-  values: any;
-  errors: any;
+  values: IUser;
+  errors: IUserFormErrors;
   touched: any;
   setFieldValue: any;
   handleChange: any;
@@ -20,9 +26,10 @@ const BrandInfoForm = ({
   setFieldValue,
   handleChange,
 }: Props) => {
-  const [logo, setLogo] = useState<FileData | null>(null);
-  return (
+  const [logo, setLogo] = useState<IFileData | null>(null);
 
+
+  return (
     <View
       style={{
         gap: 10,
@@ -33,15 +40,16 @@ const BrandInfoForm = ({
       }}>
       <CustomInput
         label="Company Registration"
-        value={values.registration}
-        error={errors.registration}
-        touched={touched.registration}
+        value={values.company?.companyName}
+        error={errors.company?.companyName}
+        touched={touched.company?.company}
         initialTouched={true}
-        handleChange={handleChange('registration')}
+        handleChange={handleChange('company.companyName')}
       />
       <View style={{marginBottom: 20}}>
         <UploadProfile
           label="Company Logo"
+          name='companyLogo'
           profilePicture={logo}
           setProfilePicture={setLogo}
         />
@@ -49,36 +57,36 @@ const BrandInfoForm = ({
       <CustomInput
         label="Website"
         placeholder="Url here"
-        value={values.websiteUrl}
-        error={errors.websiteUrl}
-        touched={touched.websiteUrl}
+        value={values.company?.website}
+        error={errors.company?.website}
+        touched={touched?.website}
         initialTouched={true}
-        handleChange={handleChange('websiteUrl')}
+        handleChange={handleChange('company.website')}
       />
       <CustomInput
         label="Affiliations"
-        value={values.affiliations}
-        error={errors.affiliations}
-        touched={touched.affiliations}
+        value={values.company?.affiliation}
+        error={errors.company?.affiliation}
+        touched={touched?.affiliation}
         initialTouched={true}
-        handleChange={handleChange('affiliations')}
+        handleChange={handleChange('company.affiliation')}
       />
       <CustomInput
         label="Publications"
-        value={values.publications}
-        error={errors.publications}
-        touched={touched.publications}
+        value={values.company?.publication}
+        error={errors.company?.publication}
+        touched={touched?.publication}
         initialTouched={true}
-        handleChange={handleChange('publications')}
+        handleChange={handleChange('company.publication')}
       />
-      <CustomInput
+      {/* <CustomInput
         label="Resume"
         value={values.resume}
         error={errors.resume}
         touched={touched.resume}
         initialTouched={true}
         handleChange={handleChange('resume')}
-      />
+      /> */}
     </View>
   );
 };

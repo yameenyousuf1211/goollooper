@@ -84,5 +84,6 @@ const styles = StyleSheet.create({
   slogan: {
     fontSize: width * 0.038,
     fontFamily: 'SpaceGrotesk-Regular',
+    color: 'rgba(54, 54, 54, 1)'
   },
 });

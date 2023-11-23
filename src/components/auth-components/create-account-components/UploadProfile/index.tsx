@@ -10,21 +10,33 @@ import {
 import {globalStlyes} from '../../../../styles/GlobalStyles';
 import {Image} from 'react-native';
 import UpperArrowIcon from '../../../../../assets/icons/UpperArrowIcon';
-import {FileData} from '../../../../screens/auth-screens/create-account-screens/CreateProfileScreen';
 import {
   ImageLibraryOptions,
   launchImageLibrary,
 } from 'react-native-image-picker';
+import {IFileData, IUser} from '../../../../interfaces/user.interface';
+import {setUserData} from '../../../../redux/AuthSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../../../redux/store';
 
 interface Props {
   label?: string;
-  profilePicture: FileData | null;
+  name?: string;
+  profilePicture: IFileData | null;
   setProfilePicture: any;
 }
 
 const {width, height} = Dimensions.get('screen');
 
-const UploadProfile = ({label, profilePicture, setProfilePicture}: Props) => {
+const UploadProfile = ({
+  label,
+  name,
+  profilePicture,
+  setProfilePicture,
+}: Props) => {
+  const dispatch = useDispatch();
+  const prevUserData = useSelector((state: RootState) => state.auth.user);
+
   useEffect(() => {
     requestCameraPermission();
   }, []);
@@ -65,6 +77,19 @@ const UploadProfile = ({label, profilePicture, setProfilePicture}: Props) => {
           name: response.assets[0].fileName,
           type: response.assets[0].type,
         });
+      }
+      if (name == 'companyLogo') {
+        const data: Partial<IUser> = {
+          ...prevUserData,
+          company: {
+            logo: {
+              uri: response.assets[0].uri,
+              name: response.assets[0].fileName,
+              type: response.assets[0].type,
+            },
+          },
+        };
+        dispatch(setUserData(data as IUser));
       }
     });
   };

@@ -54,7 +54,7 @@ const ProfileOverview = ({
   const phoneInput = useRef<PhoneInput>(null);
 
   useEffect(() => {
-    if (userData?.volunteer) {
+    if (userData?.gender) {
       setFieldValue('gender', userData?.gender);
     }
     if (userData?.volunteer) {
@@ -187,9 +187,10 @@ const ProfileOverview = ({
         {boostType === 'BSL' && (
           <>
             <SPLocation
-              values={values}
+              values={values as IUser}
               errors={errors}
               touched={touched}
+              setFieldValue={setFieldValue}
               handleChange={handleChange}
             />
             {/* <View style={{marginTop: 20}}>

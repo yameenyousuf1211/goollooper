@@ -1,13 +1,11 @@
 import React, {useState} from 'react';
-import {Text, View} from 'react-native';
+import { View} from 'react-native';
 import CustomInput from '../../../../reuseable-components/CustomInput';
-import {globalStlyes} from '../../../../../styles/GlobalStyles';
-import UploadProfile from '../../UploadProfile';
-import {FileData} from '../../../../../screens/auth-screens/create-account-screens/CreateProfileScreen';
+import { IUser, IUserFormErrors } from '../../../../../interfaces/user.interface';
 
 interface Props {
-  values: any;
-  errors: any;
+  values: IUser;
+  errors: IUserFormErrors;
   touched: any;
   setFieldValue: any;
   handleChange: any;
@@ -32,20 +30,20 @@ const Reference = ({
       <CustomInput
         label="Name"
         placeholder="Type the name of person here"
-        value={values.name}
-        error={errors.name}
-        touched={touched.name}
+        value={values.reference?.referenceName}
+        error={errors.reference?.referenceName}
+        touched={touched.reference?.referenceName}
         initialTouched={true}
-        handleChange={handleChange('name')}
+        handleChange={handleChange('reference.referenceName')}
       />
       <CustomInput
         label="Contact Information"
         placeholder="Type their phone number, linkedin etc."
-        value={values.contactInfo}
-        error={errors.contactInfo}
-        touched={touched.contactInfo}
+        value={values.reference?.contact}
+        error={errors.reference?.contact}
+        touched={touched.reference?.contact}
         initialTouched={true}
-        handleChange={handleChange('contactInfo')}
+        handleChange={handleChange('reference.contact')}
       />
     </View>
   );

@@ -69,7 +69,6 @@ const CustomInput = ({...props}: Props) => {
             backgroundColor: props.isDisable ? '#EDEDED' : undefined,
             marginTop: props.isDisable ? 10 : undefined,
             paddingTop: props.isDisable ? 14 : undefined,
-
           },
           props.extraStyles,
         ]}
@@ -99,7 +98,16 @@ const CustomInput = ({...props}: Props) => {
       )}
       {props.isTextArea && (
         <View style={{position: 'absolute', bottom: 30, right: 6}}>
-          <Text style={[globalStlyes.text12, {color: primaryColor}]}>
+          <Text
+            style={[
+              globalStlyes.text12,
+              {
+                color:
+                  props.value.length > 0
+                    ? primaryColor
+                    : 'rgba(22, 26, 29, 0.3)',
+              },
+            ]}>
             {props.value.length} / 120
           </Text>
         </View>

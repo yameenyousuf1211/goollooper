@@ -1,7 +1,6 @@
 import React from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {FileData} from '../../../../screens/auth-screens/create-account-screens/CreateProfileScreen';
 import CancelIcon from '../../../../../assets/icons/CancelIcon';
 import {
   ImageLibraryOptions,
@@ -10,9 +9,9 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {setUserData} from '../../../../redux/AuthSlice';
 import {RootState} from '../../../../redux/store';
-import {IUser} from '../../../../interfaces/user.interface';
+import {IFileData, IUser} from '../../../../interfaces/user.interface';
 interface Props {
-  image: FileData | null;
+  image: IFileData | null;
   setImage: any;
   name: string;
 }
@@ -47,22 +46,126 @@ const UploadPhoto = ({image, setImage, name}: Props) => {
           };
           dispatch(setUserData(data as IUser));
         }
+        if (name === 'visuals') {
+          const data: Partial<IUser> = {
+            ...prevUserData,
+            visuals: [
+              ...(prevUserData?.visuals ?? []),
+              {
+                uri: response.assets[0].uri,
+                name: response.assets[0].fileName,
+                type: response.assets[0].type,
+              },
+            ],
+          };
+          dispatch(setUserData(data as IUser));
+        }
+        if (name === 'certificates') {
+          const data: Partial<IUser> = {
+            ...prevUserData,
+            certificates: [
+              ...(prevUserData?.certificates ?? []),
+              {
+                uri: response.assets[0].uri,
+                name: response.assets[0].fileName,
+                type: response.assets[0].type,
+              },
+            ],
+          };
+          dispatch(setUserData(data as IUser));
+        }
+        if (name === 'licenses') {
+          const data: Partial<IUser> = {
+            ...prevUserData,
+            licenses: [
+              ...(prevUserData?.licenses ?? []),
+              {
+                uri: response.assets[0].uri,
+                name: response.assets[0].fileName,
+                type: response.assets[0].type,
+              },
+            ],
+          };
+          dispatch(setUserData(data as IUser));
+        }
+        if (name === 'insurances') {
+          const data: Partial<IUser> = {
+            ...prevUserData,
+            insurances: [
+              ...(prevUserData?.insurances ?? []),
+              {
+                uri: response.assets[0].uri,
+                name: response.assets[0].fileName,
+                type: response.assets[0].type,
+              },
+            ],
+          };
+          dispatch(setUserData(data as IUser));
+        }
       }
     });
   };
-  console.log(prevUserData);
   const handleDeleteImage = () => {
+    console.log(image?.uri);
     setImage(null);
     if (name === 'gallery') {
+      const updatedGallery =
+        prevUserData?.gallery &&
+        prevUserData.gallery.filter(deleteImg => deleteImg.uri !== image?.uri);
+
       const data: Partial<IUser> = {
         ...prevUserData,
-        gallery: prevUserData?.gallery
-          ? prevUserData?.gallery.filter(deleteImg => deleteImg.uri !== image.uri)
+        gallery: updatedGallery,
+      };
+      dispatch(setUserData(data as IUser));
+    }
+    if (name === 'visuals') {
+      const data: Partial<IUser> = {
+        ...prevUserData,
+        visuals: prevUserData?.visuals
+          ? prevUserData?.visuals.filter(
+              deleteImg => deleteImg.uri !== image?.uri,
+            )
           : [],
       };
       dispatch(setUserData(data as IUser));
     }
+    if (name === 'certificates') {
+      const data: Partial<IUser> = {
+        ...prevUserData,
+        certificates: prevUserData?.certificates
+          ? prevUserData?.certificates.filter(
+              deleteImg => deleteImg.uri !== image?.uri,
+            )
+          : [],
+      };
+      dispatch(setUserData(data as IUser));
+    }
+    if (name === 'licenses') {
+      const data: Partial<IUser> = {
+        ...prevUserData,
+        licenses: prevUserData?.licenses
+          ? prevUserData?.licenses.filter(
+              deleteImg => deleteImg.uri !== image?.uri,
+            )
+          : [],
+      };
+      dispatch(setUserData(data as IUser));
+    }
+    if (name === 'insurances') {
+      const data: Partial<IUser> = {
+        ...prevUserData,
+        insurances: prevUserData?.insurances
+          ? prevUserData?.insurances.filter(
+              deleteImg => deleteImg.uri !== image?.uri,
+            )
+          : [],
+      };
+
+      dispatch(setUserData(data as IUser));
+    }
   };
+
   return (
     <>
       {image ? (
