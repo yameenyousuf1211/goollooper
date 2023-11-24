@@ -2,7 +2,7 @@ export type IUserRole = 'service_provider' | 'user' | null;
 
 export type ILocation = {
   type: 'Point';
-  coordinates: [];
+  coordinates: [number | undefined, number | undefined];
 };
 
 export type IFileData = {
@@ -14,9 +14,9 @@ export type IFileData = {
 export type ICompany = {
   companyName?: string | null;
   logo?: IFileData | null;
-  website: string | null;
-  affiliation: string | null;
-  publication: string | null;
+  website?: string | null;
+  affiliation?: string | null;
+  publication?: string | null;
   resume?: string | null;
 };
 export type IReference = {
@@ -29,15 +29,13 @@ export type IServiceData = {
   subService: string;
 };
 
-// export type IZipCode = {
-//   code: string;
-//   isSelected: boolean;
-// };
-
 export type ILocationType = 'local' | 'global';
+
+export type IZipCode = {code: string | null; isSelected: boolean};
 
 export interface IUser {
   location?: ILocation;
+  readableLocation: string | null;
   company?: ICompany;
   reference?: IReference;
   userName: string | null;
@@ -65,7 +63,7 @@ export interface IUser {
   fcmToken?: string | null;
   volunteer?: [];
   services?: [];
-  zipCode?: [{code: string | null; isSelected: boolean}];
+  zipCode?: IZipCode[];
 }
 
 export interface IUserFormErrors {

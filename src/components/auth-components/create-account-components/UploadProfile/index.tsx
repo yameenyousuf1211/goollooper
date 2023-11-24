@@ -78,7 +78,7 @@ const UploadProfile = ({
           type: response.assets[0].type,
         });
       }
-      if (name == 'companyLogo') {
+      if (name === 'companyLogo') {
         const data: Partial<IUser> = {
           ...prevUserData,
           company: {
@@ -89,6 +89,8 @@ const UploadProfile = ({
             },
           },
         };
+        console.log("setting company logo")
+        console.log(data,"data")
         dispatch(setUserData(data as IUser));
       }
     });

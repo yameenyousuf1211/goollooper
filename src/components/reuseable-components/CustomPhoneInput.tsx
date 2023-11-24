@@ -125,11 +125,11 @@ const styles = StyleSheet.create({
     color: 'rgba(22, 26, 29, 0.9)',
     fontFamily: 'SpaceGrotesk-Medium',
     fontSize: 13,
-    marginTop: -3,
+    marginTop: -verticalScale(3),
   },
   codeText: {
     fontSize: 13,
-    marginTop: -4,
+    marginTop: -verticalScale(4),
     marginLeft: -horizontalScale(9),
     marginRight: -horizontalScale(-3),
     fontFamily: 'SpaceGrotesk-Medium',

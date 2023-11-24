@@ -10,6 +10,7 @@ import {useNavigation} from '@react-navigation/native';
 import {
   ILocationType,
   IUser,
+  IZipCode,
 } from '../../../../../../interfaces/user.interface';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../../../../redux/store';
@@ -34,6 +35,10 @@ const SPLocation = ({
   const userData = useSelector((state: RootState) => state.auth.user);
   const navigation = useNavigation<any>();
   const [selectedOption, setSelectedOption] = useState<string>('');
+  const [selectedZipCode, setSelectedZipCode] = useState<any>({
+    code: '',
+    isSelected: false,
+  });
 
   const handleSelectOption = (name: ILocationType) => {
     if (selectedOption === name) {
@@ -64,6 +69,15 @@ const SPLocation = ({
     }
     if (userData?.country) {
       setFieldValue('country', userData?.country);
+    }
+    if (userData?.readableLocation) {
+      setFieldValue('location', userData?.readableLocation);
+    }
+    if (userData?.zipCode && userData?.zipCode?.length > 0) {
+      const selectedCode = userData?.zipCode.filter(
+        (zipCode: IZipCode) => zipCode.isSelected,
+      );
+      setSelectedZipCode(selectedCode[0]);
     }
   }, [userData]);
 
@@ -116,19 +130,22 @@ const SPLocation = ({
         </TouchableOpacity>
         {selectedOption == 'local' && (
           <View style={{marginTop: 10}}>
-            <View style={{position: 'relative'}}>
+            <TouchableOpacity
+              style={{position: 'relative'}}
+              onPress={() => navigation.navigate('MapScreen')}>
               <CustomInput
-                label="Location"
+                label="Set Location"
+                placeholder="Set Location"
                 value={values.location}
+                isDisable={true}
                 touched={touched.location}
+                isMultiline={true}
                 handleChange={handleChange('location')}
               />
-              <TouchableOpacity
-                style={{position: 'absolute', right: 10, bottom: 40}}
-                onPress={() => navigation.navigate('MapScreen')}>
+              <View style={{position: 'absolute', right: 10, bottom: 40}}>
                 <LocationIcon />
-              </TouchableOpacity>
-            </View>
+              </View>
+            </TouchableOpacity>
             <CustomSelect
               label="State"
               placeholder="Select"
@@ -161,7 +178,7 @@ const SPLocation = ({
               label="Zip Code"
               placeholder="Select"
               isSingleItem={true}
-              value={userData?.zipCode && userData?.zipCode[0]?.code}
+              value={selectedZipCode?.code ? selectedZipCode.code : null}
               error={errors.state}
               touched={touched.state}
               route="ZipcodeScreen"

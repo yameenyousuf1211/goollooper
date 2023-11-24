@@ -30,7 +30,7 @@ import {
 } from '../../../redux/AuthSlice';
 import CustomLoader from '../../../components/reuseable-components/CustomLoader';
 import useLoading from '../../../hooks/useLoading';
-import { globalStlyes } from '../../../styles/GlobalStyles';
+import {globalStlyes} from '../../../styles/GlobalStyles';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -57,12 +57,14 @@ const LoginScreen = ({navigation}: any) => {
     try {
       const response = await login(reqData);
       const data = response?.data.data;
-      Toast.show({
-        type: 'success',
-        text1: `${response?.data.message}`,
-      });
-      console.log(data, 'DATA');
-      if (data?.user.isProfileCompleted) {
+
+      if (!data?.user.isVerified) {
+        navigation.navigate('Verification',{email:data?.user?.email});
+      } else if (data?.user.isProfileCompleted) {
+        Toast.show({
+          type: 'success',
+          text1: `${response?.data.message}`,
+        });
         navigation.navigate('DashboardScreen');
         dispatch(setAuthentication(true));
       } else {
@@ -180,7 +182,13 @@ const LoginScreen = ({navigation}: any) => {
                 style={{width: '40%', height: 1, backgroundColor: '#EDEDED'}}
               />
               <View>
-                <Text style={[globalStlyes.text14,{color:'rgba(162, 160, 168, 1)'}]}>or</Text>
+                <Text
+                  style={[
+                    globalStlyes.text14,
+                    {color: 'rgba(162, 160, 168, 1)'},
+                  ]}>
+                  or
+                </Text>
               </View>
               <View
                 style={{width: '40%', height: 1, backgroundColor: '#EDEDED'}}

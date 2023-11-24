@@ -1,4 +1,4 @@
-import {IUser} from '../interfaces/user.interface';
+import {IUser, IZipCode} from '../interfaces/user.interface';
 import {api} from './utils/interceptor';
 
 export const login = async (values: any) => {
@@ -51,26 +51,42 @@ export const updateProfile = async (userData: IUser) => {
   formData.append('firstName', userData?.firstName);
   formData.append('lastName', userData?.lastName);
   formData.append('userName', userData?.userName);
-  // formData.append('about', userData?.about);
-  // formData.append('phone', userData.phone);
-  // formData.append('age', Number(userData.age));
+  formData.append('about', userData?.about);
+  formData.append('phone', userData.phone);
+  formData.append('age', Number(userData.age));
   formData.append('role', userData.role);
   formData.append('gender', userData?.gender?.toLowerCase());
   if (userData?.profileImage) {
     formData.append('profileImage', userData?.profileImage);
   }
-  if (userData?.locationType !== 'local') {
+  if (userData?.locationType) {
     formData.append('locationType', userData?.locationType);
   }
-  if (userData?.State) {
-    formData.append('state', userData?.State);
+  if (userData?.locationType === 'local') {
+    if (userData?.State) {
+      formData.append('state', userData?.State);
+    }
+    if (userData?.city) {
+      formData.append('city', userData?.city);
+    }
+    if (userData?.country) {
+      formData.append('country', userData?.country);
+    }
+    if (userData?.location) {
+      formData.append('location[coordinates][0]', '25.3673935');
+      formData.append('location[coordinates][1]', '55.419619');
+    }
+    if (userData?.zipCode) {
+      userData?.zipCode.forEach((zipCodeData: IZipCode, index) => {
+        formData.append(`zipCode[${index}][code]`, zipCodeData.code);
+        formData.append(
+          `zipCode[${index}][isSelected]`,
+          zipCodeData.isSelected,
+        );
+      });
+    }
   }
-  if (userData?.city) {
-    formData.append('city', userData?.city);
-  }
-  if (userData?.country) {
-    formData.append('country', userData?.country);
-  }
+
   if (userData?.volunteer) {
     userData?.volunteer.forEach((volunteerData: any, index) => {
       formData.append(`volunteer[${index}][service]`, volunteerData.service);
@@ -82,7 +98,9 @@ export const updateProfile = async (userData: IUser) => {
     if (userData?.company?.companyName) {
       formData.append('company[name]', userData.company?.companyName);
     }
-    formData.append('company[logo]', userData.company?.logo);
+    // if (userData?.company?.logo) {
+    //   formData.append('company[logo]', userData.company?.logo);
+    // }
     if (userData?.company?.website) {
       formData.append(
         'company[website]',
@@ -95,7 +113,9 @@ export const updateProfile = async (userData: IUser) => {
     if (userData?.company?.publication) {
       formData.append('company[publication]', userData.company?.publication);
     }
-    formData.append('company[resume]', userData.company?.resume);
+    if (userData?.company?.resume) {
+      formData.append('company[resume]', userData.company?.resume);
+    }
 
     if (userData?.reference?.referenceName) {
       formData.append('reference[name]', userData.reference?.referenceName);
@@ -131,7 +151,7 @@ export const updateProfile = async (userData: IUser) => {
   }
 
   console.log(formData, 'FORMDATA');
-  const response = await api.put(`user/${userData?._id}`, formData, {
+  const response = await api.put(`user`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },

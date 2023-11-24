@@ -9,17 +9,35 @@ import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../redux/store';
 import {IUser} from '../../../interfaces/user.interface';
 import {setUserData} from '../../../redux/AuthSlice';
+import CustomInput from '../../../components/reuseable-components/CustomInput';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
+
+export const genderSchema = Yup.object().shape({
+  gender: Yup.string()
+    .required('Gender is required')
+    .matches(/^[A-Za-z]+$/, 'Invalid Gender Name'), // Ensures no spaces in the name
+});
 
 const GenderScreen = ({navigation}: any) => {
   const dispatch = useDispatch();
   const prevUserData = useSelector((state: RootState) => state.auth.user);
   const [selectedItem, setSelectedItem] = useState<string>('');
+  const [genderValue, setGenderValue] = useState<string>('');
+  const [genderError, setGenderError] = useState<string>('');
+
   useEffect(() => {
     if (prevUserData?.gender) {
-      setSelectedItem(prevUserData.gender);
+      console.log(prevUserData.gender)
+      if (prevUserData?.gender !== 'Male' && prevUserData?.gender !== 'Female') {
+        setSelectedItem('Other');
+        setGenderValue(prevUserData?.gender)
+      } else {
+        setSelectedItem(prevUserData.gender);
+      }
     }
   }, []);
-  
+
   const handleSelectItem = (item: string) => {
     if (selectedItem?.includes(item)) {
       setSelectedItem('');
@@ -27,10 +45,22 @@ const GenderScreen = ({navigation}: any) => {
       setSelectedItem(item);
     }
   };
+
+  const handleGenderChange = (text: string) => {
+    const regex = /^[A-Za-z]+$/;
+    const isValid = regex.test(text);
+    setGenderValue(text);
+    setGenderError(isValid ? '' : 'Invalid Gender Name');
+  };
+
   const handleSubmit = () => {
+    if (selectedItem === 'Other' && genderValue == '') {
+      setGenderError('Enter gender!');
+      return;
+    }
     const data: Partial<IUser> = {
       ...prevUserData,
-      gender: selectedItem,
+      gender: selectedItem === 'Other' ? genderValue : selectedItem,
     };
     dispatch(setUserData(data as IUser));
     navigation.navigate('CreateProfileScreen');
@@ -70,9 +100,9 @@ const GenderScreen = ({navigation}: any) => {
           </View>
           <ChevronBottomIconTwo />
         </View>
-        <View style={{gap: 10, borderRadius: 12}}>
+        <View style={{gap: 6, borderRadius: 12}}>
           <View style={{flexDirection: 'row', flexWrap: 'wrap', gap: 10}}>
-            {['Male', 'Female'].map((item: any) => (
+            {['Male', 'Female', 'Other'].map((item: any) => (
               <TouchableOpacity
                 style={{
                   backgroundColor: selectedItem?.includes(item)
@@ -94,6 +124,15 @@ const GenderScreen = ({navigation}: any) => {
               </TouchableOpacity>
             ))}
           </View>
+          {selectedItem == 'Other' && (
+            <CustomInput
+              label=""
+              value={genderValue}
+              touched={true}
+              error={genderError}
+              handleChange={handleGenderChange}
+            />
+          )}
         </View>
       </View>
       <View style={{width: '100%', alignItems: 'flex-end'}}>

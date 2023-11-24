@@ -28,7 +28,7 @@ import LiabilityInsurance from '../../../components/auth-components/create-accou
 import BoostProfile from '../../../components/auth-components/BoostProfile';
 import {RootState} from '../../../redux/store';
 import {useSelector, useDispatch} from 'react-redux';
-import {setuserRole} from '../../../redux/AuthSlice';
+import {setUserData, setuserRole} from '../../../redux/AuthSlice';
 import {
   IFileData,
   IService,
@@ -109,10 +109,15 @@ const CreateProfileScreen = ({navigation}: any) => {
         subService: subItem._id,
       })),
     );
+    console.log(userData, 'before');
     const reqData: Partial<IUser> = {
       ...userData,
       ...values,
       profileImage: profilePicture,
+      company: {
+        ...values.company,
+        logo: userData?.company?.logo,
+      },
       role: userRole,
       email: userData?.email,
       phone: `+${phoneCode}${values.phone}`,
@@ -124,14 +129,15 @@ const CreateProfileScreen = ({navigation}: any) => {
       const response = await updateProfile(reqData as IUser);
       const data = response?.data.data;
       console.log(response?.data?.message, 'DATA');
-      // setIsProfileCompleted(true);
-      // dispatch(setUserData(data));
+      setIsProfileCompleted(true);
+      dispatch(setUserData(data));
+      setIsProfileCompleted(true);
     } catch (error: any) {
       Toast.show({
         type: 'error',
         text1: `${error?.response?.data?.message}`,
       });
-      console.log(error?.response);
+      console.log(error?.response?.data);
     }
     stopLoading();
   };

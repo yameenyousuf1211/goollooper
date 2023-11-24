@@ -57,7 +57,7 @@ const ProfileOverview = ({
     if (userData?.gender) {
       setFieldValue('gender', userData?.gender);
     }
-    if (userData?.volunteer) {
+    if (userData?.volunteer && userData?.volunteer.length >0) {
       setFieldValue('volunteer', userData?.volunteer);
     }
   }, [userData]);

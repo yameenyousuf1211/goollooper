@@ -7,16 +7,17 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {primaryColor, secondaryTextColor} from '../../../utils/colors';
 import CustomModal from '../../../components/modals/CustomBottomModal';
 import CustomButton from '../../../components/reuseable-components/CustomButton';
 import {setAccessToken} from '../../../redux/AuthSlice';
-import {verifyCode} from '../../../api';
+import {getOtpCode, verifyCode} from '../../../api';
 import useLoading from '../../../hooks/useLoading';
 import Toast from 'react-native-toast-message';
 import CustomLoader from '../../../components/reuseable-components/CustomLoader';
 import {useDispatch} from 'react-redux';
+import {globalStlyes} from '../../../styles/GlobalStyles';
 
 type Props = {};
 const {width, height} = Dimensions.get('screen');
@@ -24,19 +25,29 @@ const {width, height} = Dimensions.get('screen');
 const VerificationScreen = ({navigation, route}: any) => {
   const dispatch = useDispatch();
   const {isLoading, startLoading, stopLoading} = useLoading();
-
+  const [secondsRemaining, setSecondsRemaining] = useState(60);
   const inputRefs = useRef<Array<TextInput | null>>([]);
   const [otp, setOtp] = useState<string[]>(Array());
   const [isModal, setIsModal] = useState<boolean>(false);
-
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+  const [newOtp, setNewOtp] = useState<string>('');
+
+  useEffect(() => {
+    if (secondsRemaining == 0) {
+      return;
+    }
+    let interval = setInterval(() => {
+      setSecondsRemaining(secondsRemaining => {
+        secondsRemaining <= 1 && clearInterval(interval);
+        return secondsRemaining - 1;
+        otp;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [secondsRemaining]);
 
   const handleInputFocus = (index: number) => {
     setFocusedIndex(index);
-  };
-
-  const handleInputBlur = () => {
-    setFocusedIndex(null);
   };
 
   const handleInputChange = (index: number, value: string) => {
@@ -54,6 +65,28 @@ const VerificationScreen = ({navigation, route}: any) => {
       inputRefs.current[index - 1]?.focus();
     } else if (key !== 'Backspace' && index < inputRefs.current.length - 1) {
       inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const resendOtp = async () => {
+    try {
+      const response = await getOtpCode({email: route?.params?.email});
+      const data = response?.data.data;
+      setNewOtp(data?.code);
+      setSecondsRemaining(60);
+    } catch (error: any) {
+      if (error?.response?.data?.message) {
+        Toast.show({
+          type: 'error',
+          text1: `${error?.response?.data.message}`,
+        });
+        console.log(error.response, 'error');
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: `${error.message}!`,
+        });
+      }
     }
   };
 
@@ -118,24 +151,26 @@ const VerificationScreen = ({navigation, route}: any) => {
                   }}>
                   {route?.params?.email}
                 </Text>
-                <Text
-                  style={{
-                    marginTop: 5,
-                    color: primaryColor,
-                    fontSize: width * 0.032,
-                    fontFamily: 'SpaceGrotesk-Regular',
-                  }}>
+                {route?.params?.otp && newOtp === '' && (
                   <Text
                     style={{
-                      color: secondaryTextColor,
+                      marginTop: 5,
+                      color: primaryColor,
                       fontSize: width * 0.032,
                       fontFamily: 'SpaceGrotesk-Regular',
                     }}>
-                    {' '}
-                    Your Otp code is:{' '}
-                  </Text>{' '}
-                  {route?.params?.otp}
-                </Text>
+                    <Text
+                      style={{
+                        color: secondaryTextColor,
+                        fontSize: width * 0.032,
+                        fontFamily: 'SpaceGrotesk-Regular',
+                      }}>
+                      {' '}
+                      Your otp code is:{' '}
+                    </Text>{' '}
+                    {newOtp !== '' ? newOtp : route?.params?.otp}
+                  </Text>
+                )}
               </View>
               <View style={styles.inputContainer}>
                 {Array.from({length: 6}, (_, index) => (
@@ -176,20 +211,31 @@ const VerificationScreen = ({navigation, route}: any) => {
                   }}>
                   Didn't receive code?{' '}
                 </Text>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={resendOtp}
+                  disabled={secondsRemaining !== 0}
+                  activeOpacity={secondsRemaining === 0 ? 0 : 1}>
                   <Text
                     style={{
-                      color: primaryColor,
+                      color:
+                        secondsRemaining === 0
+                          ? primaryColor
+                          : 'rgba(162, 160, 168, 1)',
                       fontSize: width * 0.032,
                       fontFamily: 'SpaceGrotesk-Regular',
                     }}>
-                    Resend
+                    Resend{' '}
+                    <Text style={{color: primaryColor}}>
+                      {secondsRemaining != 0 && `in 00:${secondsRemaining}`}
+                    </Text>
                   </Text>
                 </TouchableOpacity>
               </View>
               <View style={{width: '100%'}}>
                 <CustomButton
-                  isDisabled={otp.length < 6 || isLoading}
+                  isDisabled={
+                    otp.some(value => !value) || otp.length < 6 || isLoading
+                  }
                   onPress={handleSubmit}>
                   {isLoading ? <CustomLoader /> : 'Verify Code'}
                 </CustomButton>

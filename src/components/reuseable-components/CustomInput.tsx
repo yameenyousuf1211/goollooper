@@ -29,6 +29,7 @@ interface Props {
   extraStyles?: any;
   isDisable?: boolean;
   isTextArea?: boolean;
+  isMultiline?: boolean;
   handleChange: (e: any) => void;
 }
 
@@ -38,10 +39,8 @@ const CustomInput = ({...props}: Props) => {
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState(false);
   const isError =
-    props.error &&
-    ((props.touched && !props.value) ||
-      (props.error && props.value) ||
-      isFocused);
+  props.error && ((props.touched && !props.value) || (props.error && props.value) || isFocused) 
+
 
   const handleChangeText = (text: string) => {
     if (props.handleChange) {
@@ -50,6 +49,10 @@ const CustomInput = ({...props}: Props) => {
   };
   const handleInputFocus = () => {
     setIsFocused(true);
+  };
+
+  const handleInputBlur = () => {
+    setIsFocused(false);
   };
   return (
     <View style={{position: 'relative'}}>
@@ -66,9 +69,9 @@ const CustomInput = ({...props}: Props) => {
           styles.input,
           {
             borderBottomColor: isError ? redColor : '#EDEDED',
-            backgroundColor: props.isDisable ? '#EDEDED' : undefined,
-            marginTop: props.isDisable ? 10 : undefined,
-            paddingTop: props.isDisable ? 14 : undefined,
+            backgroundColor: props.isDisable && props.label !== "Set Location" ? '#EDEDED' : undefined,
+            marginTop: props.isDisable && props.label !== "Set Location" ? 10 : undefined,
+            paddingTop: props.isDisable && props.label !== "Set Location" ? 14 : undefined,
           },
           props.extraStyles,
         ]}
@@ -83,7 +86,8 @@ const CustomInput = ({...props}: Props) => {
         maxLength={120}
         onChangeText={handleChangeText}
         onFocus={handleInputFocus}
-        multiline={props?.isTextArea ? true : false}
+        onBlur={handleInputBlur}
+        multiline={props?.isMultiline ? true : false}
       />
       {props?.isShowPasswordIcon && (
         <TouchableOpacity
@@ -128,6 +132,7 @@ export const styles = StyleSheet.create({
   input: {
     borderBottomWidth: 1,
     paddingVertical: 10,
+    paddingLeft: 0,
     color: 'rgba(22, 26, 29, 0.9)',
     fontWeight: '400',
     fontFamily: 'SpaceGrotesk-Medium',

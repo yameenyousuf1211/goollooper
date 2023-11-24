@@ -1,10 +1,7 @@
 import * as Yup from 'yup';
 
 const email = Yup.string()
-  .matches(
-    /^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
-    'Invalid email',
-  )
+  .matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Invalid email')
   .required('Email is required');
 
 const notRequiredEmail = Yup.string()
@@ -53,7 +50,7 @@ export const createProfileSchema = Yup.object().shape({
     .min(3, 'First Name must be at least 3 characters long'),
   lastName: Yup.string()
     .required('Last Name is required')
-    .matches(/^[A-Za-z]+$/, 'Invalid Last Name') // Ensures no spaces in the name
+    .matches(/^[A-Za-z -]+$/, 'Invalid Last Name') // Ensures no spaces in the name
     .min(3, 'Last Name must be at least 3 characters long'),
   userName: Yup.string()
     .required('Username is required')
