@@ -82,6 +82,7 @@ const UploadProfile = ({
         const data: Partial<IUser> = {
           ...prevUserData,
           company: {
+            resume: prevUserData?.company?.resume,
             logo: {
               uri: response.assets[0].uri,
               name: response.assets[0].fileName,
@@ -89,8 +90,8 @@ const UploadProfile = ({
             },
           },
         };
-        console.log("setting company logo")
-        console.log(data,"data")
+        console.log('setting company logo');
+        console.log(data, 'data');
         dispatch(setUserData(data as IUser));
       }
     });

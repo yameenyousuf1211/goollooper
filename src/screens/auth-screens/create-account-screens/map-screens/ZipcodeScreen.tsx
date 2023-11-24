@@ -73,9 +73,8 @@ const ZipcodeScreen = ({navigation}: any) => {
     <View
       style={[
         globalStlyes.container,
-        {alignItems: 'flex-start', padding: 20, paddingTop: 20},
+        {alignItems: 'flex-start',justifyContent: 'space-between', padding: 20, paddingTop: 20},
       ]}>
-      <ScrollView style={{width: '100%'}}>
         <View
           style={{
             gap: 32,
@@ -84,7 +83,7 @@ const ZipcodeScreen = ({navigation}: any) => {
             width: '100%',
           }}>
  
-          <View style={{gap: 8}}>
+          <ScrollView style={{gap: 8}} showsVerticalScrollIndicator={false}>
             {zipCodes.map((zipCode, index) => (
               <View key={index} style={{gap: 8, position: 'relative'}}>
                 <View
@@ -160,7 +159,7 @@ const ZipcodeScreen = ({navigation}: any) => {
                 </Text>
               </View>
             </CustomButton>
-          </View>
+          </ScrollView>
           <View style={[styles.buttonContainer]}>
             <CustomButton
               extraStyles={{width: 77}}
@@ -170,7 +169,6 @@ const ZipcodeScreen = ({navigation}: any) => {
             </CustomButton>
           </View>
         </View>
-      </ScrollView>
     </View>
   );
 };

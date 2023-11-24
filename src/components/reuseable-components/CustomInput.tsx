@@ -55,7 +55,7 @@ const CustomInput = ({...props}: Props) => {
     setIsFocused(false);
   };
   return (
-    <View style={{position: 'relative'}}>
+    <View style={{position: 'relative',width: '100%'}}>
       <Text
         style={{
           color: secondaryTextColor,
@@ -72,6 +72,8 @@ const CustomInput = ({...props}: Props) => {
             backgroundColor: props.isDisable && props.label !== "Set Location" ? '#EDEDED' : undefined,
             marginTop: props.isDisable && props.label !== "Set Location" ? 10 : undefined,
             paddingTop: props.isDisable && props.label !== "Set Location" ? 14 : undefined,
+            paddingLeft: props.isDisable && props.label !== "Set Location" ? 6 : 0,
+
           },
           props.extraStyles,
         ]}
@@ -132,10 +134,11 @@ export const styles = StyleSheet.create({
   input: {
     borderBottomWidth: 1,
     paddingVertical: 10,
+    width: '100%',
     paddingLeft: 0,
     color: 'rgba(22, 26, 29, 0.9)',
     fontWeight: '400',
-    fontFamily: 'SpaceGrotesk-Medium',
+    fontFamily: 'SpaceGrotesk-Regular',
     fontSize: 14,
     paddingRight: 30,
     borderRadius: 12,

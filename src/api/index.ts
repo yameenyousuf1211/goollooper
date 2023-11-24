@@ -30,8 +30,8 @@ export const resetPassword = async (values: any) => {
 
 // getting volunter services
 
-export const getServices = async () => {
-  const response = await api.get('service');
+export const getServices = async (type: string) => {
+  const response = await api.get(`service?type=${type}`);
   return response;
 };
 
@@ -98,9 +98,9 @@ export const updateProfile = async (userData: IUser) => {
     if (userData?.company?.companyName) {
       formData.append('company[name]', userData.company?.companyName);
     }
-    // if (userData?.company?.logo) {
-    //   formData.append('company[logo]', userData.company?.logo);
-    // }
+    if (userData?.company?.logo) {
+      formData.append('companyLogo', userData.company?.logo);
+    }
     if (userData?.company?.website) {
       formData.append(
         'company[website]',
@@ -114,7 +114,7 @@ export const updateProfile = async (userData: IUser) => {
       formData.append('company[publication]', userData.company?.publication);
     }
     if (userData?.company?.resume) {
-      formData.append('company[resume]', userData.company?.resume);
+      formData.append('companyResume', userData.company?.resume);
     }
 
     if (userData?.reference?.referenceName) {
@@ -133,6 +133,7 @@ export const updateProfile = async (userData: IUser) => {
         formData.append('visuals', userData.visuals[i]);
       }
     }
+
     if (userData?.certificates) {
       for (let i = 0; i < userData.certificates.length; i++) {
         formData.append('certificates', userData.certificates[i]);

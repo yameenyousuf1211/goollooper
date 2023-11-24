@@ -59,7 +59,10 @@ const LoginScreen = ({navigation}: any) => {
       const data = response?.data.data;
 
       if (!data?.user.isVerified) {
-        navigation.navigate('Verification',{email:data?.user?.email});
+        navigation.navigate('Verification', {
+          email: data?.user?.email,
+          isCreateProfile: true,
+        });
       } else if (data?.user.isProfileCompleted) {
         Toast.show({
           type: 'success',

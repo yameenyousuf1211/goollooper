@@ -32,7 +32,7 @@ const VolunteerScreen = ({navigation, route}: any) => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await getServices();
+        const response = await getServices('volunteer');
         const services = response?.data?.data?.services;
         setItems(services);
       } catch (error: any) {
@@ -41,7 +41,7 @@ const VolunteerScreen = ({navigation, route}: any) => {
     };
     fetchServices();
     if (prevUserData?.volunteer) {
-      setSelectedItems(prevUserData.volunteer);
+      setSelectedItems(prevUserData.volunteer as any);
     }
   }, []);
 
@@ -65,9 +65,7 @@ const VolunteerScreen = ({navigation, route}: any) => {
       volunteer: selectedItems as any,
     };
     dispatch(setUserData(data as IUser));
-    navigation.navigate('CreateProfileScreen', {
-      volunteerItems: selectedItems,
-    });
+    navigation.navigate('CreateProfileScreen');
   };
   return (
     <View
@@ -105,77 +103,77 @@ const VolunteerScreen = ({navigation, route}: any) => {
           <ChevronBottomIconTwo />
         </View>
         <ScrollView style={{gap: 10, borderRadius: 12}}>
-            {items.map((item: IService) => (
-              <TouchableOpacity
-                onPress={() =>
-                  activeItemId === item?._id
-                    ? setActiveItemId('')
-                    : setActiveItemId(item?._id)
-                }
+          {items.map((item: IService) => (
+            <TouchableOpacity
+              key={item._id}
+              onPress={() =>
+                activeItemId === item?._id
+                  ? setActiveItemId('')
+                  : setActiveItemId(item?._id)
+              }
+              style={{
+                backgroundColor: '#F2F2F2',
+                borderRadius: 12,
+                padding: 16,
+                gap: 16,
+                marginBottom: 10,
+              }}>
+              <View
                 style={{
-                  backgroundColor: '#F2F2F2',
-                  borderRadius: 12,
-                  padding: 16,
-                  gap: 16,
-                  marginBottom: 10
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
                 }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Text
-                    style={[
-                      {
-                        fontSize: 13,
-                        color: '#1E1E1E',
-                        fontFamily: 'SpaceGrotesk-Medium',
-                      },
-                    ]}>
-                    {item.title}
-                  </Text>
-                  {activeItemId.includes(item?._id) ? (
-                    <ChevronBottomIconTwo />
-                  ) : (
-                    <ChevronRightIcon />
-                  )}
-                </View>
-                {activeItemId.includes(item?._id) && item?.subServices && (
-                  <View
-                    style={{flexDirection: 'row', flexWrap: 'wrap', gap: 10}}>
-                    {activeItemId.includes(item?._id) &&
-                      item?.subServices?.map((subItem: ISubService) => {
-                        let isSelected = selectedItems.some(selectedItem =>
-                          selectedItem.subServices.some(
-                            (subService: any) => subService._id === subItem._id,
-                          ),
-                        );
-                        return (
-                          <TouchableOpacity
-                            style={{
-                              backgroundColor: isSelected
-                                ? primaryColor
-                                : 'transparent',
-                              borderWidth: 1,
-                              borderColor: '#D9D9D9',
-                              padding: 10,
-                              borderRadius: 12,
-                            }}
-                            key={item?._id}
-                            onPress={() => handleSelectItem(item)}>
-                            <Text
-                              style={{
-                                color: isSelected ? 'white' : '#949494',
-                              }}>
-                              {subItem?.title}
-                            </Text>
-                          </TouchableOpacity>
-                        );
-                      })}
-                  </View>
+                <Text
+                  style={[
+                    {
+                      fontSize: 13,
+                      color: '#1E1E1E',
+                      fontFamily: 'SpaceGrotesk-Medium',
+                    },
+                  ]}>
+                  {item.title}
+                </Text>
+                {activeItemId.includes(item?._id) ? (
+                  <ChevronBottomIconTwo />
+                ) : (
+                  <ChevronRightIcon />
                 )}
-              </TouchableOpacity>
-            ))}
+              </View>
+              {activeItemId.includes(item?._id) && item?.subServices && (
+                <View style={{flexDirection: 'row', flexWrap: 'wrap', gap: 10}}>
+                  {activeItemId.includes(item?._id) &&
+                    item?.subServices?.map((subItem: ISubService) => {
+                      let isSelected = selectedItems.some(selectedItem =>
+                        selectedItem.subServices.some(
+                          (subService: any) => subService._id === subItem._id,
+                        ),
+                      );
+                      return (
+                        <TouchableOpacity
+                          style={{
+                            backgroundColor: isSelected
+                              ? primaryColor
+                              : 'transparent',
+                            borderWidth: 1,
+                            borderColor: '#D9D9D9',
+                            padding: 10,
+                            borderRadius: 12,
+                          }}
+                          key={subItem?._id}
+                          onPress={() => handleSelectItem(item)}>
+                          <Text
+                            style={{
+                              color: isSelected ? 'white' : '#949494',
+                            }}>
+                            {subItem?.title}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                </View>
+              )}
+            </TouchableOpacity>
+          ))}
         </ScrollView>
       </View>
       <View

@@ -17,7 +17,7 @@ export type ICompany = {
   website?: string | null;
   affiliation?: string | null;
   publication?: string | null;
-  resume?: string | null;
+  resume?: IFileData | null;
 };
 export type IReference = {
   referenceName: string | null;
@@ -35,7 +35,7 @@ export type IZipCode = {code: string | null; isSelected: boolean};
 
 export interface IUser {
   location?: ILocation;
-  readableLocation: string | null;
+  readableLocation?: string | null;
   company?: ICompany;
   reference?: IReference;
   userName: string | null;
@@ -61,8 +61,8 @@ export interface IUser {
   profileImage?: IFileData | null;
   role?: IUserRole;
   fcmToken?: string | null;
-  volunteer?: [];
-  services?: [];
+  volunteer?: string | [];
+  services?: string | [];
   zipCode?: IZipCode[];
 }
 
@@ -76,6 +76,7 @@ export interface IUserFormErrors {
   age: string;
   about: string;
   volunteer: string;
+  services: string;
   company?: {
     companyName: string;
     website: string;

@@ -57,8 +57,11 @@ const ProfileOverview = ({
     if (userData?.gender) {
       setFieldValue('gender', userData?.gender);
     }
-    if (userData?.volunteer && userData?.volunteer.length >0) {
+    if (userData?.volunteer && userData?.volunteer.length > 0) {
       setFieldValue('volunteer', userData?.volunteer);
+    }
+    if (userData?.services && userData?.services.length > 0) {
+      setFieldValue('services', userData?.services);
     }
   }, [userData]);
 
@@ -173,16 +176,16 @@ const ProfileOverview = ({
         route="VolunteerScreen"
         isSingleItem={false}
       />
-      {/* {userRole === 'service_provider' && (
+      {userRole === 'service_provider' && (
         <CustomSelect
           label="Service Provider’s Speciality"
           placeholder="Select"
-          value={values.serviceProviderSpeciality}
-          error={errors.serviceProviderSpeciality}
-          touched={touched.serviceProviderSpeciality}
+          value={values.services}
+          error={errors.services}
+          touched={touched.services}
           route="SPSpeciality"
         />
-      )} */}
+      )}
       <View>
         {boostType === 'BSL' && (
           <>
@@ -193,16 +196,16 @@ const ProfileOverview = ({
               setFieldValue={setFieldValue}
               handleChange={handleChange}
             />
-            {/* <View style={{marginTop: 20}}>
+            <View style={{marginTop: 20}}>
               <CustomSelect
                 label="Add Schedule"
                 placeholder="Day & Time"
-                value={values.addSchedule}
-                error={errors.addSchedule}
+                value={''}
+                error={''}
                 touched={touched.addSchedule}
                 route="ScheduleScreen"
               />
-            </View> */}
+            </View>
           </>
         )}
       </View>

@@ -151,7 +151,7 @@ const VerificationScreen = ({navigation, route}: any) => {
                   }}>
                   {route?.params?.email}
                 </Text>
-                {route?.params?.otp && newOtp === '' && (
+                {route?.params?.otp && newOtp === '' ? (
                   <Text
                     style={{
                       marginTop: 5,
@@ -170,7 +170,26 @@ const VerificationScreen = ({navigation, route}: any) => {
                     </Text>{' '}
                     {newOtp !== '' ? newOtp : route?.params?.otp}
                   </Text>
-                )}
+                ) : newOtp !== '' ? (
+                  <Text
+                    style={{
+                      marginTop: 5,
+                      color: primaryColor,
+                      fontSize: width * 0.032,
+                      fontFamily: 'SpaceGrotesk-Regular',
+                    }}>
+                    <Text
+                      style={{
+                        color: secondaryTextColor,
+                        fontSize: width * 0.032,
+                        fontFamily: 'SpaceGrotesk-Regular',
+                      }}>
+                      {' '}
+                      Your otp code is:{' '}
+                    </Text>{' '}
+                    {newOtp}
+                  </Text>
+                ) : null}
               </View>
               <View style={styles.inputContainer}>
                 {Array.from({length: 6}, (_, index) => (

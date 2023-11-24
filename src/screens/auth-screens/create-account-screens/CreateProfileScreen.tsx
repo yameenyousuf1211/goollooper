@@ -51,7 +51,8 @@ const initialValues: IUser = {
   gender: '',
   age: '',
   about: '',
-  volunteer: [],
+  volunteer: '',
+  services: '',
   State: '',
   city: '',
   country: '',
@@ -117,6 +118,7 @@ const CreateProfileScreen = ({navigation}: any) => {
       company: {
         ...values.company,
         logo: userData?.company?.logo,
+        resume: userData?.company?.resume,
       },
       role: userRole,
       email: userData?.email,
@@ -129,7 +131,6 @@ const CreateProfileScreen = ({navigation}: any) => {
       const response = await updateProfile(reqData as IUser);
       const data = response?.data.data;
       console.log(response?.data?.message, 'DATA');
-      setIsProfileCompleted(true);
       dispatch(setUserData(data));
       setIsProfileCompleted(true);
     } catch (error: any) {
@@ -155,7 +156,8 @@ const CreateProfileScreen = ({navigation}: any) => {
       ) : (
         <Formik
           initialValues={initialValues}
-          validationSchema={createProfileSchema}
+          validationSchema={createProfileSchema(userRole)}
+          validationContext={{userRole: userRole}}
           onSubmit={handleSubmit}>
           {({
             handleChange,
@@ -391,13 +393,15 @@ const CreateProfileScreen = ({navigation}: any) => {
                         </Text>
                       </TouchableOpacity>
                     )}
-                    {userRole === 'service_provider' && boostType == null && (
-                      <BoostProfile
-                        onBoostProfile={() =>
-                          navigation.navigate('SubscriptionScreen')
-                        }
-                      />
-                    )}
+                    {userRole === 'service_provider' &&
+                      boostType == null &&
+                      isProfileOverview && (
+                        <BoostProfile
+                          onBoostProfile={() =>
+                            navigation.navigate('SubscriptionScreen')
+                          }
+                        />
+                      )}
                   </View>
                   <View
                     style={[

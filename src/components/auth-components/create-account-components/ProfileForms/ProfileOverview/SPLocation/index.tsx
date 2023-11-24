@@ -173,12 +173,11 @@ const SPLocation = ({
               route="CountryScreen"
               isSingleItem={true}
             />
-
             <CustomSelect
               label="Zip Code"
               placeholder="Select"
               isSingleItem={true}
-              value={selectedZipCode?.code ? selectedZipCode.code : null}
+              value={selectedZipCode?.code ? selectedZipCode.code : ''}
               error={errors.state}
               touched={touched.state}
               route="ZipcodeScreen"
