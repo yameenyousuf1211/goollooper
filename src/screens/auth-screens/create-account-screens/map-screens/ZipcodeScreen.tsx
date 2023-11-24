@@ -84,6 +84,7 @@ const ZipcodeScreen = ({navigation}: any) => {
           }}>
  
           <ScrollView style={{gap: 8}} showsVerticalScrollIndicator={false}>
+            
             {zipCodes.map((zipCode, index) => (
               <View key={index} style={{gap: 8, position: 'relative'}}>
                 <View
