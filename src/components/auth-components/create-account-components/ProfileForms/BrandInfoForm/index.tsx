@@ -55,9 +55,9 @@ const BrandInfoForm = ({
           company: {
             logo: prevUserData?.company?.logo,
             resume: {
-              uri: resume?.uri as string,
-              name: resume?.name as string,
-              type: resume?.type as string,
+              uri: res?.uri as string,
+              name: res?.name as string,
+              type: res?.type as string,
             },
           },
         };

@@ -4,7 +4,6 @@ import StarIcon from '../../../../assets/icons/StarIcon';
 import {globalStlyes} from '../../../styles/GlobalStyles';
 import InfoIcon from '../../../../assets/icons/InfoIcon';
 import {primaryColor} from '../../../utils/colors';
-import CustomModal from '../../modals/CustomBottomModal';
 import {IPlan, ISubscription} from '../../../interfaces/user.interface';
 
 interface Props {

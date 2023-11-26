@@ -28,7 +28,7 @@ const authSlice = createSlice({
     setuserRole: (state, action: PayloadAction<IUserRole>) => {
       state.userRole = action.payload;
     },
-    setUserData: (state, action: PayloadAction<IUser>) => {
+    setUserData: (state, action: PayloadAction<IUser | null>) => {
       state.user = action.payload;
     },
     setBoostType: (state, action: PayloadAction<IBoostType>) => {

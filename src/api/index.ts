@@ -88,7 +88,7 @@ export const updateProfile = async (userData: IUser) => {
   }
 
   if (userData?.volunteer) {
-    userData?.volunteer.forEach((volunteerData: any, index) => {
+    userData?.volunteer.forEach((volunteerData: any, index: number) => {
       formData.append(`volunteer[${index}][service]`, volunteerData.service);
       formData.append(
         `volunteer[${index}][subService]`,

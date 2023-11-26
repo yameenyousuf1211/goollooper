@@ -10,25 +10,16 @@ import {useState} from 'react';
 import {primaryColor, secondaryTextColor} from '../../../utils/colors';
 import {globalStlyes} from '../../../styles/GlobalStyles';
 import CustomButton from '../../../components/reuseable-components/CustomButton';
-import ChevronRightIcon from '../../../../assets/icons/ChevronRightIcon';
-import ChevronBottomIcon from '../../../../assets/icons/ChevronBottomIcon';
 import {verticalScale} from '../../../utils/metrics';
 import {createProfileSchema} from '../../../validations';
 import {Formik} from 'formik';
 import CustomModal from '../../../components/modals/CustomBottomModal';
 import UploadProfile from '../../../components/auth-components/create-account-components/UploadProfile';
 import {PROFILE_OPTIONS} from '../../../utils/data';
-import ProfileOverview from '../../../components/auth-components/create-account-components/ProfileForms/ProfileOverview';
-import VisualValidationForm from '../../../components/auth-components/create-account-components/ProfileForms/VisualValidationForm';
-import BrandInfoForm from '../../../components/auth-components/create-account-components/ProfileForms/BrandInfoForm';
-import ProfessionalCertificates from '../../../components/auth-components/create-account-components/ProfileForms/ProfessionalCertificates';
-import Licensing from '../../../components/auth-components/create-account-components/ProfileForms/Licensing';
-import Reference from '../../../components/auth-components/create-account-components/ProfileForms/Reference';
-import LiabilityInsurance from '../../../components/auth-components/create-account-components/ProfileForms/LiabilityInsurance';
 import BoostProfile from '../../../components/auth-components/BoostProfile';
 import {RootState} from '../../../redux/store';
 import {useSelector, useDispatch} from 'react-redux';
-import {setUserData, setuserRole} from '../../../redux/AuthSlice';
+import {setBoostType, setUserData, setuserRole} from '../../../redux/AuthSlice';
 import {
   IFileData,
   IService,
@@ -40,6 +31,7 @@ import Toast from 'react-native-toast-message';
 import {updateProfile} from '../../../api';
 import useLoading from '../../../hooks/useLoading';
 import CustomLoader from '../../../components/reuseable-components/CustomLoader';
+import ProfileForms from '../../../components/auth-components/create-account-components/ProfileForms';
 
 const {width, height} = Dimensions.get('screen');
 const initialValues: IUser = {
@@ -73,7 +65,6 @@ const CreateProfileScreen = ({navigation}: any) => {
   const userRole = useSelector((state: RootState) => state.auth.userRole);
   const userData = useSelector((state: RootState) => state.auth.user);
   const {isLoading, startLoading, stopLoading} = useLoading();
-
   const dispatch = useDispatch();
 
   const [isProfileOverview, setIsProfileOverview] = useState<boolean>(false);
@@ -102,7 +93,6 @@ const CreateProfileScreen = ({navigation}: any) => {
   };
 
   const handleSubmit = async (values: IUser) => {
-    console.log(values, 'FORM SUBMIT VALUES!');
     startLoading();
     const volunteerItems = userData?.volunteer?.flatMap((item: IService) =>
       item.subServices.map((subItem: ISubService) => ({
@@ -131,14 +121,15 @@ const CreateProfileScreen = ({navigation}: any) => {
       const response = await updateProfile(reqData as IUser);
       const data = response?.data.data;
       console.log(response?.data?.message, 'DATA');
-      dispatch(setUserData(data));
+      dispatch(setUserData(null));
+      dispatch(setBoostType(null));
       setIsProfileCompleted(true);
     } catch (error: any) {
       Toast.show({
         type: 'error',
         text1: `${error?.response?.data?.message}`,
       });
-      console.log(error?.response?.data);
+      console.log(error, 'Error while create profile');
     }
     stopLoading();
   };
@@ -169,197 +160,36 @@ const CreateProfileScreen = ({navigation}: any) => {
           }) => (
             <View style={{flex: 1}}>
               <View style={globalStlyes.container}>
-                <View
-                  style={{
-                    width: '90%',
-                    height: '100%',
-                    flex: 1,
-                    paddingVertical: height * 0.024,
-                    justifyContent: 'space-between',
-                  }}>
+                <View style={styles.innerContainer}>
                   <View style={{gap: 16}}>
                     <Text style={globalStlyes.pageHeading}>Create Profile</Text>
                     <UploadProfile
                       profilePicture={profilePicture}
                       setProfilePicture={setProfilePicture}
                     />
-                    {boostType === null &&
-                      PROFILE_OPTIONS.map((profile: any) => {
-                        const isSelected = selectedProfileOptions.includes(
-                          profile.id,
-                        );
-                        return (
-                          <>
-                            {profile.name === 'Profile Overview' && (
-                              <TouchableOpacity
-                                style={[
-                                  styles.profileOptionsContainer,
-                                  {
-                                    backgroundColor: isSelected
-                                      ? primaryColor
-                                      : 'rgba(250, 250, 250, 1)',
-                                  },
-                                ]}
-                                onPress={() =>
-                                  handleSelectProfileOption(profile.id)
-                                }>
-                                <Text
-                                  style={[
-                                    globalStlyes.text14,
-                                    {
-                                      color: isSelected ? 'white' : '#161A1D',
-                                    },
-                                  ]}>
-                                  {profile.name}
-                                </Text>
-                                {isSelected ? (
-                                  <ChevronBottomIcon />
-                                ) : (
-                                  <ChevronRightIcon />
-                                )}
-                              </TouchableOpacity>
-                            )}
-
-                            {selectedProfileOptions.includes(profile.id) &&
-                              profile.name === 'Profile Overview' && (
-                                <ProfileOverview
-                                  values={values as IUser}
-                                  errors={errors as IUserFormErrors} // Explicit cast here
-                                  boostType={boostType}
-                                  userRole={userRole}
-                                  touched={touched}
-                                  setPhoneCode={setPhoneCode}
-                                  userData={userData as IUser}
-                                  setFieldValue={setFieldValue}
-                                  handleChange={handleChange}
-                                />
-                              )}
-                            {/* {selectedProfileOptions.includes(profile.id) &&
-                              profile.name === 'Visual Validation' && (
-                                <VisualValidationForm />
-                              )}
-                            {selectedProfileOptions.includes(profile.id) &&
-                              profile.name === 'Brand Information' && (
-                                <BrandInfoForm
-                                  values={values as IUser}
-                                  errors={errors as IUserFormErrors}
-                                  touched={touched}
-                                  setFieldValue={setFieldValue}
-                                  handleChange={handleChange}
-                                />
-                              )}
-                            {selectedProfileOptions.includes(profile.id) &&
-                              profile.name ===
-                                'Professional Certifications' && (
-                                <ProfessionalCertificates />
-                              )}
-                            {selectedProfileOptions.includes(profile.id) &&
-                              profile.name === 'Licensing' && <Licensing />}
-                            {selectedProfileOptions.includes(profile.id) &&
-                              profile.name === 'Reference' && (
-                                <Reference
-                                  values={values}
-                                  errors={errors}
-                                  touched={touched}
-                                  setFieldValue={setFieldValue}
-                                  handleChange={handleChange}
-                                />
-                              )}
-                            {selectedProfileOptions.includes(profile.id) &&
-                              profile.name ===
-                                'Liability Insurance / Certification of Insurance' && (
-                                <LiabilityInsurance />
-                              )} */}
-                          </>
-                        );
-                      })}
-                    {boostType &&
-                      PROFILE_OPTIONS.map((profile: any) => {
-                        const isSelected = selectedProfileOptions.includes(
-                          profile.id,
-                        );
-                        return (
-                          <>
-                            <TouchableOpacity
-                              style={[
-                                styles.profileOptionsContainer,
-                                {
-                                  backgroundColor: isSelected
-                                    ? primaryColor
-                                    : 'rgba(250, 250, 250, 1)',
-                                },
-                              ]}
-                              onPress={() =>
-                                handleSelectProfileOption(profile.id)
-                              }>
-                              <Text
-                                style={[
-                                  globalStlyes.text14,
-                                  {
-                                    color: isSelected ? 'white' : '#161A1D',
-                                  },
-                                ]}>
-                                {profile.name}
-                              </Text>
-                              {isSelected ? (
-                                <ChevronBottomIcon />
-                              ) : (
-                                <ChevronRightIcon />
-                              )}
-                            </TouchableOpacity>
-                            {selectedProfileOptions.includes(profile.id) &&
-                              profile.name === 'Profile Overview' && (
-                                <ProfileOverview
-                                  values={values as IUser}
-                                  errors={errors as IUserFormErrors}
-                                  boostType={boostType}
-                                  userRole={userRole}
-                                  userData={userData as IUser}
-                                  touched={touched}
-                                  setPhoneCode={setPhoneCode}
-                                  setFieldValue={setFieldValue}
-                                  handleChange={handleChange}
-                                />
-                              )}
-                            {selectedProfileOptions.includes(profile.id) &&
-                              profile.name === 'Visual Validation' && (
-                                <VisualValidationForm />
-                              )}
-                            {selectedProfileOptions.includes(profile.id) &&
-                              profile.name === 'Brand Information' && (
-                                <BrandInfoForm
-                                  values={values as IUser}
-                                  errors={errors as IUserFormErrors}
-                                  touched={touched}
-                                  setFieldValue={setFieldValue}
-                                  handleChange={handleChange}
-                                />
-                              )}
-                            {selectedProfileOptions.includes(profile.id) &&
-                              profile.name ===
-                                'Professional Certifications' && (
-                                <ProfessionalCertificates />
-                              )}
-                            {selectedProfileOptions.includes(profile.id) &&
-                              profile.name === 'Licensing' && <Licensing />}
-                            {selectedProfileOptions.includes(profile.id) &&
-                              profile.name === 'Reference' && (
-                                <Reference
-                                  values={values as IUser}
-                                  errors={errors as IUserFormErrors}
-                                  touched={touched}
-                                  setFieldValue={setFieldValue}
-                                  handleChange={handleChange}
-                                />
-                              )}
-                            {selectedProfileOptions.includes(profile.id) &&
-                              profile.name ===
-                                'Liability Insurance / Certification of Insurance' && (
-                                <LiabilityInsurance />
-                              )}
-                          </>
-                        );
-                      })}
+                    {PROFILE_OPTIONS.map((profile: any) => {
+                      const isSelected = selectedProfileOptions.includes(
+                        profile.id,
+                      );
+                      return (
+                        <ProfileForms
+                          key={profile?.id}
+                          userData={userData as IUser}
+                          profile={profile}
+                          userRole={userRole}
+                          isSelected={isSelected}
+                          boostType={boostType}
+                          errors={errors as IUserFormErrors}
+                          values={values}
+                          touched={touched}
+                          selectedProfileOptions={selectedProfileOptions}
+                          setFieldValue={setFieldValue}
+                          setPhoneCode={setPhoneCode}
+                          handleChange={handleChange}
+                          onSelectProfileOption={handleSelectProfileOption}
+                        />
+                      );
+                    })}
 
                     {boostType === null && isProfileOverview && (
                       <TouchableOpacity
@@ -394,7 +224,7 @@ const CreateProfileScreen = ({navigation}: any) => {
                       </TouchableOpacity>
                     )}
                     {userRole === 'service_provider' &&
-                      boostType == null &&
+                      boostType === null &&
                       isProfileOverview && (
                         <BoostProfile
                           onBoostProfile={() =>
@@ -437,6 +267,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#FFF',
+  },
+  innerContainer: {
+    width: '90%',
+    height: '100%',
+    flex: 1,
+    paddingVertical: height * 0.024,
+    justifyContent: 'space-between',
   },
   pageHeading: {
     color: secondaryTextColor,

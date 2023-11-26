@@ -2,25 +2,16 @@ import React from 'react';
 import {
   Dimensions,
   Image,
-  ImageBackground,
   SafeAreaView,
-  StatusBar,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import {primaryColor} from '../../../utils/colors';
 import CustomButton from '../../../components/reuseable-components/CustomButton';
-import { AWS_URL, DEV_BASE_URL, PROD_BASE_URL } from '../../../api/constant';
 
 const {width, height} = Dimensions.get('screen');
 
 const SplashScreen = ({navigation}: any) => {
-  console.log(DEV_BASE_URL);
-  console.log(PROD_BASE_URL);
-  console.log(AWS_URL);
-
 
   return (
     <SafeAreaView>

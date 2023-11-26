@@ -61,8 +61,8 @@ export interface IUser {
   profileImage?: IFileData | null;
   role?: IUserRole;
   fcmToken?: string | null;
-  volunteer?: string | [];
-  services?: string | [];
+  volunteer?: string | [] | any;
+  services?: string | [] | any;
   zipCode?: IZipCode[];
 }
 
