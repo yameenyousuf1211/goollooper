@@ -8,13 +8,13 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import {primaryColor, redColor, secondaryTextColor} from '../../utils/colors';
-import HidePasswordIcon from '../../../assets/icons/HidePasswordIcon';
-import {verticalScale} from '../../utils/metrics';
-import WarnIcon from '../../../assets/icons/WarnIcon';
-import {globalStlyes} from '../../styles/GlobalStyles';
+import {primaryColor, redColor, secondaryTextColor} from '../../../utils/colors';
+import HidePasswordIcon from '../../../../assets/icons/HidePasswordIcon';
+import {verticalScale} from '../../../utils/metrics';
+import WarnIcon from '../../../../assets/icons/WarnIcon';
+import {globalStlyes} from '../../../styles/GlobalStyles';
 import Icon from 'react-native-vector-icons/Ionicons';
-import CustomError from './CustomError';
+import CustomError from '../CustomError';
 
 interface Props {
   label: string;

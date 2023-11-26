@@ -4,11 +4,11 @@ import {
   horizontalScale,
   moderateScale,
   verticalScale,
-} from '../../utils/metrics';
+} from '../../../utils/metrics';
 import PhoneInput from 'react-native-phone-number-input';
-import {redColor, secondaryTextColor} from '../../utils/colors';
-import ChevronBottomIconTwo from '../../../assets/icons/ChevronBottomIconTwo';
-import CustomError from './CustomError';
+import {redColor, secondaryTextColor} from '../../../utils/colors';
+import ChevronBottomIconTwo from '../../../../assets/icons/ChevronBottomIconTwo';
+import CustomError from '../CustomError';
 
 interface Props {
   label: string;

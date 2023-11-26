@@ -1,9 +1,9 @@
 import React from 'react';
 import {Text, View} from 'react-native';
-import WarnIcon from '../../../assets/icons/WarnIcon';
-import {globalStlyes} from '../../styles/GlobalStyles';
-import {verticalScale} from '../../utils/metrics';
-import {redColor} from '../../utils/colors';
+import WarnIcon from '../../../../assets/icons/WarnIcon';
+import {globalStlyes} from '../../../styles/GlobalStyles';
+import {verticalScale} from '../../../utils/metrics';
+import { redColor } from '../../../utils/colors';
 
 interface Props {
   error: string;

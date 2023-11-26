@@ -1,12 +1,12 @@
 import React from 'react';
 import {Dimensions, Text, TouchableOpacity, View} from 'react-native';
-import {primaryColor, redColor, secondaryTextColor} from '../../utils/colors';
-import {globalStlyes} from '../../styles/GlobalStyles';
+import {primaryColor, redColor, secondaryTextColor} from '../../../utils/colors';
+import {globalStlyes} from '../../../styles/GlobalStyles';
 import {useNavigation} from '@react-navigation/native';
-import CustomError from './CustomError';
-import ChevronRightIconTwo from '../../../assets/icons/ChevronRightIconTwo';
-import ChevronRightIcon from '../../../assets/icons/ChevronRightIcon';
-import {IService, ISubService} from '../../interfaces/user.interface';
+import ChevronRightIconTwo from '../../../../assets/icons/ChevronRightIconTwo';
+import ChevronRightIcon from '../../../../assets/icons/ChevronRightIcon';
+import {IService, ISubService} from '../../../interfaces/user.interface';
+import CustomError from '../CustomError';
 
 const {width, height} = Dimensions.get('screen');
 

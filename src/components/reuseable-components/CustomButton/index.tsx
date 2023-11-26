@@ -1,6 +1,6 @@
 import React, {ReactNode} from 'react';
 import {Pressable, View, Text, StyleSheet} from 'react-native';
-import {primaryColor} from '../../utils/colors';
+import {primaryColor} from '../../../utils/colors';
 
 interface Props {
   children: ReactNode;

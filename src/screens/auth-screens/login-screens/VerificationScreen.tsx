@@ -7,7 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import React, {useRef, useState, useEffect} from 'react';
+import React, {useRef, useState, useEffect, useCallback} from 'react';
 import {primaryColor, secondaryTextColor} from '../../../utils/colors';
 import CustomModal from '../../../components/modals/CustomBottomModal';
 import CustomButton from '../../../components/reuseable-components/CustomButton';
@@ -18,6 +18,7 @@ import Toast from 'react-native-toast-message';
 import CustomLoader from '../../../components/reuseable-components/CustomLoader';
 import {useDispatch} from 'react-redux';
 import {globalStlyes} from '../../../styles/GlobalStyles';
+import {useFocusEffect} from '@react-navigation/native';
 
 type Props = {};
 const {width, height} = Dimensions.get('screen');
@@ -31,6 +32,7 @@ const VerificationScreen = ({navigation, route}: any) => {
   const [isModal, setIsModal] = useState<boolean>(false);
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const [newOtp, setNewOtp] = useState<string>('');
+
 
   useEffect(() => {
     if (secondsRemaining == 0) {
@@ -99,7 +101,7 @@ const VerificationScreen = ({navigation, route}: any) => {
       const data = response?.data.data;
       dispatch(setAccessToken(data.accessToken));
       if (route?.params?.isCreateProfile) {
-        setIsModal(true);
+        navigation.navigate('ContactPermissionScreen');
       } else {
         navigation.navigate('ResetPassword');
       }
@@ -117,7 +119,7 @@ const VerificationScreen = ({navigation, route}: any) => {
         <CustomModal
           title="Account Created"
           text="Congratulations! Your account has been created successfully.
-        Please proceed to profile creation."
+         Please proceed to profile creation."
           buttonText="Set Up Profile"
           route="CreateProfileScreen"
         />

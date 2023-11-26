@@ -25,6 +25,7 @@ import SetScheduleScreen from '../../screens/auth-screens/create-account-screens
 import SettimeScreen from '../../screens/auth-screens/create-account-screens/schedule-screens/SettimeScreen';
 import MapScreen from '../../screens/auth-screens/create-account-screens/map-screens/MapScreen';
 import DashboardScreen from '../../screens/dashboard-screens';
+import ContactPermissionScreen from '../../screens/auth-screens/create-account-screens/ContactPermissionScreen';
 
 const Stack = createStackNavigator();
 
@@ -45,7 +46,7 @@ export const AuthStack = () => {
           fontFamily: 'SpaceGrotesk-Medium',
         },
       }}
-      initialRouteName="Splash">
+      initialRouteName="Splash ">
       {/* //  initialRouteName="ScheduleScreen">  */}
       <Stack.Screen
         name="Splash"
@@ -87,6 +88,11 @@ export const AuthStack = () => {
       <Stack.Screen
         name="CreateAccountScreen"
         component={CreateAccountScreen}
+        options={{headerShown: false}}
+      />
+       <Stack.Screen
+        name="ContactPermissionScreen"
+        component={ContactPermissionScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen

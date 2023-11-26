@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Image, StyleSheet, ActivityIndicator} from 'react-native';
-import {verticalScale} from '../../utils/metrics';
+import {verticalScale} from '../../../utils/metrics';
 
 interface Props {
   isStyle?: boolean;
