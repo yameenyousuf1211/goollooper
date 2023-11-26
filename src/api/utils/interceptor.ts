@@ -1,8 +1,9 @@
 import axios, {InternalAxiosRequestConfig} from 'axios';
 import store from '../../redux/store';
+import {DEV_BASE_URL} from '../constant';
 
 export const api = axios.create({
-  baseURL: 'http://goollooper.yameenyousuf.com/api/',
+  baseURL: DEV_BASE_URL,
 });
 
 api.interceptors.request.use((config: InternalAxiosRequestConfig<any>) => {

@@ -46,7 +46,7 @@ export const AuthStack = () => {
           fontFamily: 'SpaceGrotesk-Medium',
         },
       }}
-      initialRouteName="Splash ">
+      initialRouteName="Splash">
       {/* //  initialRouteName="ScheduleScreen">  */}
       <Stack.Screen
         name="Splash"
