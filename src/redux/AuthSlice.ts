@@ -3,7 +3,7 @@ import {IUser, IUserRole} from '../interfaces/user.interface';
 
 export type IBoostType = 'BSP' | 'MBS' | 'BSL' | 'IW' | null;
 
-interface IAuth {
+export interface IAuth {
   userRole: IUserRole;
   boostType: IBoostType;
   user: IUser | null;

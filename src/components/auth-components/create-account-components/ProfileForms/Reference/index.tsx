@@ -38,7 +38,7 @@ const Reference = ({
       />
       <CustomInput
         label="Contact Information"
-        placeholder="Type their phone number, linkedin etc."
+        placeholder="Type their phone, linkedin, email etc."
         value={values.reference?.contact}
         error={errors.reference?.contact}
         touched={touched.reference?.contact}

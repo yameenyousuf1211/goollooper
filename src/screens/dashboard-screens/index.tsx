@@ -54,10 +54,10 @@ const DashboardScreen = ({navigation}: any) => {
       </View>
     );
 
-    // navigation.setOptions({
-    //   headerRight: () => headerRightButton,
-    //   headerLeft: () => headerLeftButton,
-    // });
+    navigation.setOptions({
+      headerRight: () => headerRightButton,
+      headerLeft: () => headerLeftButton,
+    });
   }, [navigation]);
   return (
     <View
@@ -66,20 +66,22 @@ const DashboardScreen = ({navigation}: any) => {
         {
           // alignItems: 'flex-start',
           // justifyContent: 'flex-start',
-          paddingLeft: 20,
-          paddingTop: 20,
         },
       ]}>
-        <Text style={globalStlyes.text14}>Dashboard Coming soon!</Text>
-      {/* <ScrollView>
+      {/* <Text style={globalStlyes.text14}>Dashboard Coming soon!</Text> */}
+      <ScrollView>
         <View style={{gap: 20}}>
-          <Text style={[globalStlyes.text14, {color: primaryColor}]}>
+          <Text
+            style={[
+              globalStlyes.text14,
+              {color: primaryColor, paddingTop: 20, paddingLeft: 20},
+            ]}>
             My Activities
           </Text>
           <ServiceInterests interest={INTERESTS} />
           <MatchedProviders providers={MATCHED_SERVICE_PROVIDERS} />
         </View>
-      </ScrollView> */}
+      </ScrollView>
     </View>
   );
 };

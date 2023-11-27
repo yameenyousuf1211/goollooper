@@ -1,8 +1,7 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
   PermissionsAndroid,
@@ -21,21 +20,31 @@ import {IUser} from '../../../../interfaces/user.interface';
 import {setUserData} from '../../../../redux/AuthSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../../redux/store';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import {GOOGLE_ALI_KEY} from '../../../../api/constant';
+import {horizontalScale, verticalScale} from '../../../../utils/metrics';
 
 const MapScreen = ({navigation}: any) => {
   const dispatch = useDispatch();
   const prevUserData = useSelector((state: RootState) => state.auth.user);
+  const mapRef = useRef<any>();
   const [initialRegion, setInitialRegion] = useState<Region | undefined>(
     undefined,
   );
   const [userCurrentLocation, setUserCurrentLocation] = useState<
     Region | undefined
   >(undefined);
+  const [searchedLocation, setSearchedLocation] = useState<Region | undefined>(
+    undefined,
+  );
   const [markerCoordinate, setMarkerCoordinate] = useState<Region | undefined>(
     undefined,
   );
   const [userAddress, setUserAddress] = useState<string>('Loading...');
-  const [isSelectLocation, setIsSelectLocation] = useState<boolean>(false);
+  const [searchedAddress, setSearchedAddress] = useState<string>('Loading...');
+
+  const [selectLocation, setSelectLocation] = useState<string>('');
+  const [isAddMoreClicked, setIsAddMoreClicked] = useState<boolean>(false);
 
   useEffect(() => {
     requestLocationPermission();
@@ -82,7 +91,7 @@ const MapScreen = ({navigation}: any) => {
   useEffect(() => {
     if (userCurrentLocation) {
       const {latitude, longitude} = userCurrentLocation;
-      const apiKey = 'AIzaSyAoQH4pdrX59zY5xcJrAUEgEqF5r4qRHes';
+      const apiKey = GOOGLE_ALI_KEY;
       const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
 
       axios
@@ -98,19 +107,27 @@ const MapScreen = ({navigation}: any) => {
         });
     }
   }, [userCurrentLocation]);
+
+  useEffect(() => {
+    if (searchedLocation) {
+      setSearchedLocation(searchedLocation);
+    }
+  }, [searchedLocation]);
+
   useEffect(() => {
     const headerRightButton = (
       <TouchableOpacity
-        disabled={!isSelectLocation}
+        disabled={selectLocation === ''}
         onPress={handleSelectLocation}>
         <View style={{marginRight: 16}}>
           <Text
             style={[
               globalStlyes.text14,
               {
-                color: isSelectLocation
-                  ? primaryColor
-                  : 'rgba(118, 118, 128, 0.6)',
+                color:
+                  selectLocation !== ''
+                    ? primaryColor
+                    : 'rgba(118, 118, 128, 0.6)',
               },
             ]}>
             Done
@@ -122,7 +139,7 @@ const MapScreen = ({navigation}: any) => {
     navigation.setOptions({
       headerRight: () => headerRightButton,
     });
-  }, [navigation, isSelectLocation]);
+  }, [navigation, selectLocation]);
 
   const handleSelectLocation = () => {
     const data: Partial<IUser> = {
@@ -146,54 +163,155 @@ const MapScreen = ({navigation}: any) => {
         {justifyContent: 'flex-start', paddingTop: 20},
       ]}>
       <View style={{flex: 1, width: '100%', gap: 10}}>
-        <View style={styles.searchContainer}>
-          <SearchIcon />
-          <TextInput placeholder="Search" />
+        <View
+          style={{
+            borderRadius: 12,
+            marginHorizontal: horizontalScale(16),
+            flexDirection: 'row',
+            alignItems: 'center',
+            height: 40,
+            position: 'relative',
+          }}>
+          <View style={{position: 'absolute', left: 10}}>
+            <SearchIcon />
+          </View>
+          <GooglePlacesAutocomplete
+            placeholder="Search"
+            onPress={(data, details) => {
+              console.log('Location:', details?.geometry);
+              try {
+                if (details) {
+                  const {lat, lng} = details.geometry.location;
+                  const location: Region = {
+                    latitude: lat,
+                    longitude: lng,
+                    latitudeDelta: 0.015,
+                    longitudeDelta: 0.0121,
+                  };
+                  setInitialRegion(location);
+                  setSearchedLocation(location);
+                  setMarkerCoordinate(location);
+                  setSearchedAddress(
+                    details?.formatted_address || 'Loading...',
+                  );
+                  mapRef.current.animateToRegion(location, 1000); // Adjust the duration as needed
+                }
+              } catch (error) {
+                console.error('Error in onPress callback:', error);
+              }
+            }}
+            query={{
+              key: GOOGLE_ALI_KEY,
+              language: 'en',
+            }}
+            // currentLocation={true}
+            // currentLocationLabel="Current Location"
+            enablePoweredByContainer={false}
+            fetchDetails={true}
+            styles={{
+              textInput: {
+                height: '100%',
+                color: '#000',
+                backgroundColor: 'rgba(118, 118, 128, 0.12)',
+                borderRadius: 12,
+                zIndex: 1,
+                paddingLeft: 30,
+              },
+              description: {
+                color: '#000',
+              },
+              listView: {
+                position: 'absolute',
+                top: verticalScale(40) + 2,
+                backgroundColor: '#fff',
+                zIndex: 1,
+              },
+            }}
+          />
         </View>
-        <TouchableOpacity
-          style={styles.locationContainer}
-          onPress={() => setIsSelectLocation(!isSelectLocation)}>
-          <View style={styles.iconContainer}>
-            <NavigationIcon />
-          </View>
-          <View style={{gap: 2}}>
-            <Text
-              style={[globalStlyes.text12, {color: 'rgba(123, 141, 149, 1)'}]}>
-              Location
-            </Text>
-            <Text
-              style={[
-                globalStlyes.text12,
-                {color: 'rgba(123, 141, 149, 1)', width: 200},
-              ]}>
-              {userAddress}
-            </Text>
-          </View>
-          {isSelectLocation && (
-            <View style={{marginLeft: 25}}>
-              <CheckIcon />
+        {searchedLocation && (
+          <TouchableOpacity
+            style={styles.locationContainer}
+            onPress={() =>
+              selectLocation == 'search'
+                ? setSelectLocation('')
+                : setSelectLocation('search')
+            }>
+            <View style={styles.iconContainer}>
+              <NavigationIcon />
             </View>
-          )}
+            <View style={{gap: 2}}>
+              <Text
+                style={[
+                  globalStlyes.text12,
+                  {color: 'rgba(123, 141, 149, 1)'},
+                ]}>
+                Location
+              </Text>
+              <Text
+                style={[
+                  globalStlyes.text12,
+                  {color: 'rgba(123, 141, 149, 1)', width: 200},
+                ]}>
+                {searchedAddress}
+              </Text>
+            </View>
+            {selectLocation == 'search' && (
+              <View style={{marginLeft: 25}}>
+                <CheckIcon />
+              </View>
+            )}
+          </TouchableOpacity>
+        )}
+        {isAddMoreClicked && (
+          <TouchableOpacity
+            style={styles.locationContainer}
+            onPress={() =>
+              selectLocation == 'current'
+                ? setSelectLocation('')
+                : setSelectLocation('current')
+            }>
+            <View style={styles.iconContainer}>
+              <MarkerPinIcon />
+            </View>
+            <View style={{gap: 2}}>
+              <Text
+                style={[
+                  globalStlyes.text12,
+                  {color: 'rgba(123, 141, 149, 1)'},
+                ]}>
+                Location
+              </Text>
+              <Text
+                style={[
+                  globalStlyes.text12,
+                  {color: 'rgba(123, 141, 149, 1)', width: 200},
+                ]}>
+                {userAddress}
+              </Text>
+            </View>
+            {selectLocation == 'current' && (
+              <View style={{marginLeft: 25}}>
+                <CheckIcon />
+              </View>
+            )}
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity
+          style={{position: 'relative', width: '100%', marginBottom: 20}}
+          onPress={() => setIsAddMoreClicked(true)}>
+          <Text
+            style={[
+              globalStlyes.text14,
+              {color: primaryColor, position: 'absolute', right: 20},
+            ]}>
+            Add more
+          </Text>
         </TouchableOpacity>
-
-        {/* <TouchableOpacity style={styles.locationContainer}>
-          <View style={styles.iconContainer}>
-            <MarkerPinIcon />
-          </View>
-          <View style={{gap: 2}}>
-            <Text
-              style={[globalStlyes.text12, {color: 'rgba(123, 141, 149, 1)'}]}>
-              Valley Hayes
-            </Text>
-            <Text
-              style={[globalStlyes.text12, {color: 'rgba(123, 141, 149, 1)'}]}>
-              Valley Hayes, San Francisco, USA
-            </Text>
-          </View>
-        </TouchableOpacity> */}
         <View style={{flex: 1}}>
           {/* {initialRegion && userCurrentLocation ? ( */}
           <MapView
+            ref={mapRef}
             style={{flex: 1}}
             showsUserLocation={true}
             showsMyLocationButton={true}

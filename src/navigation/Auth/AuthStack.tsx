@@ -46,7 +46,7 @@ export const AuthStack = () => {
           fontFamily: 'SpaceGrotesk-Medium',
         },
       }}
-      initialRouteName="Splash">
+      initialRouteName="MapScreen">
       {/* //  initialRouteName="ScheduleScreen">  */}
       <Stack.Screen
         name="Splash"
@@ -158,7 +158,7 @@ export const AuthStack = () => {
       <Stack.Screen
         name="CountryScreen"
         component={CountryScreen}
-        options={{title: 'Country'}}
+        options={{title: 'County'}}
       />
       <Stack.Screen
         name="ZipcodeScreen"

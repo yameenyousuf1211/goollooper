@@ -22,8 +22,8 @@ const MatchedProviders = ({providers}: Props) => {
   const renderProvider = ({item}: {item: any}) => {
     return (
       <TouchableOpacity
-        style={{flexDirection: 'column', marginBottom: 20, width: '100%'}}
-        // onPress={() => navigation.navigate('SPProfile')}
+        style={{flexDirection: 'column', marginBottom: 20, width: '100%',}}
+        onPress={() => navigation.navigate('SPProfile')}
         >
         <View
           style={{
@@ -90,9 +90,11 @@ const MatchedProviders = ({providers}: Props) => {
                   backgroundColor: 'rgba(246, 246, 246, 1)',
                   padding: 8,
                   borderRadius: 12,
-                  marginRight: 3,
                   marginTop: 8,
                   paddingHorizontal: 12,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width:100
                 }}>
                 <Text
                   style={{
@@ -111,7 +113,7 @@ const MatchedProviders = ({providers}: Props) => {
     );
   };
   return (
-    <View style={{gap: 16, marginTop: 10}}>
+    <View style={{gap: 16, marginTop: 10,paddingLeft: 20}}>
       <Text style={globalStlyes.text16}>Matched Service Provider</Text>
 
       <View>

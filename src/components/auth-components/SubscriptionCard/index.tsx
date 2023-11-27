@@ -54,7 +54,7 @@ const SubscriptionCard = ({
 
   const getTagline = (data: ISubscription | IPlan) => {
     if ('tagline' in data) {
-      return data.tagline;
+      return `(${data.tagline})`;
     } else {
       return `Per ${
         data.duration.charAt(0).toUpperCase() + data.duration.slice(1)
@@ -85,8 +85,8 @@ const SubscriptionCard = ({
           },
         ]}>
         <View style={{gap: 10}}>
-          <Text style={[globalStlyes.text16]}>{getDisplayName(data)}</Text>
-          <Text style={[globalStlyes.text12]}>({getTagline(data)})</Text>
+          <Text style={[globalStlyes.text16,{fontWeight: '500'}]}>{getDisplayName(data)}</Text>
+          <Text style={[globalStlyes.text12]}>{getTagline(data)}</Text>
         </View>
 
         {isShowIcon ? (

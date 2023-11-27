@@ -63,7 +63,7 @@ const ProfileOverview = ({
     if (userData?.services && userData?.services.length > 0) {
       setFieldValue('services', userData?.services);
     }
-  }, [userData]);
+  }, [userData,userData?.volunteer]);
 
   const handleChangeUserName = async (text: string, setFieldValue: any) => {
     setFieldValue('userName', text);
@@ -153,6 +153,7 @@ const ProfileOverview = ({
         initialTouched={true}
         handleChange={handleChange('about')}
         isTextArea={true}
+        isMultiline={true}
         extraStyles={{height: 120}}
       />
       <View style={{gap: 20, paddingBottom: 20}}>
@@ -170,7 +171,7 @@ const ProfileOverview = ({
       <CustomSelect
         label="Volunteer"
         placeholder="Select"
-        value={values.volunteer as any}
+        value={values.volunteer}
         error={errors.volunteer}
         touched={touched.volunteer}
         route="VolunteerScreen"
@@ -204,6 +205,7 @@ const ProfileOverview = ({
                 error={''}
                 touched={touched.addSchedule}
                 route="ScheduleScreen"
+                isDisable={boostType !== 'BSL'}
               />
             </View>
           </>

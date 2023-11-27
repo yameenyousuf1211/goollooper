@@ -12,11 +12,13 @@ interface Props {
   interest: any;
 }
 
-const ServiceInterests = ({interest}: any) => {
+const ServiceInterests = ({interest}: Props) => {
   return (
     <View style={styles.container}>
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-        <Text style={globalStlyes.text16}>Service Interest</Text>
+        <Text style={[globalStlyes.text16, {paddingLeft: 20}]}>
+          Service Interest
+        </Text>
         <TouchableOpacity>
           <Text
             style={[
@@ -27,15 +29,16 @@ const ServiceInterests = ({interest}: any) => {
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.interestContainer}>
+      <View style={[styles.interestContainer]}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {interest.map((item: any) => (
+          {interest.map((item: any, index: number) => (
             <View
               style={{
                 backgroundColor: primaryColor,
                 padding: 10,
                 borderRadius: 12,
-                marginRight: 3,
+                marginLeft: index === 0 ? 20 : 3,
+                marginRight: index === interest.length - 1 ? 10 : 0,
               }}>
               <Text
                 style={{
@@ -60,6 +63,6 @@ const styles = StyleSheet.create({
   interestContainer: {
     flexDirection: 'row',
     gap: 4,
-    paddingRight: 7,
+    // paddingRight: 7,
   },
 });

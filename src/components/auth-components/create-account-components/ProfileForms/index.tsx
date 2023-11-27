@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {Text, TouchableOpacity, StyleSheet, View} from 'react-native';
 import {globalStlyes} from '../../../../styles/GlobalStyles';
 import ChevronBottomIcon from '../../../../../assets/icons/ChevronBottomIcon';
 import ProfileOverview from './ProfileOverview';
@@ -85,15 +85,29 @@ const ProfileForms = ({
             },
           ]}
           onPress={() => onSelectProfileOption(profile.id)}>
-          <Text
-            style={[
-              globalStlyes.text14,
-              {
-                color: isSelected ? 'white' : '#161A1D',
-              },
-            ]}>
-            {profile.name}
-          </Text>
+          <View>
+            <Text
+              style={[
+                globalStlyes.text14,
+                {
+                  color: isSelected ? 'white' : '#161A1D',
+                },
+              ]}>
+              {profile.name}
+            </Text>
+            {profile.name === 'Visual Validation' && (
+              <Text
+                style={[
+                  {
+                    fontSize: 8,
+                    color: isSelected ? 'white' : 'rgba(22, 26, 29, 1)',
+                    fontFamily: 'SpaceGrotesk-Regular',
+                  },
+                ]}>
+                (Upload Photos or Videos)
+              </Text>
+            )}
+          </View>
           {isSelected ? <ChevronBottomIcon /> : <ChevronRightIcon />}
         </TouchableOpacity>
       )}

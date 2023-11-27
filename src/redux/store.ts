@@ -10,11 +10,30 @@ import {
 } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthSlice from './AuthSlice';
+import createTransform from 'redux-persist/es/createTransform';
 
 const persistConfig = {
   key: 'root',
   version: 1,
   storage: AsyncStorage,
+  transforms: [
+    // Exclude boostType property from being persisted
+    createTransform(
+      (inboundState, key) => {
+        if (key === 'auth') {
+          const {boostType, userRole, ...rest}: any = inboundState;
+          return rest;
+        }
+        return inboundState;
+      },
+      (outboundState, key) => {
+        if (key === 'auth') {
+          return {...outboundState, boostType: null, userRole: null};
+        }
+        return outboundState;
+      },
+    ),
+  ],
 };
 
 const rootReducer = combineReducers({

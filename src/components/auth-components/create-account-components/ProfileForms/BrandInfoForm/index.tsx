@@ -45,7 +45,7 @@ const BrandInfoForm = ({
   const handleUploadResume = async () => {
     try {
       const res: any = await DocumentPicker.pickSingle({
-        type: types.pdf,
+        type: [types.pdf, types.doc, types.docx], 
       });
       if (!isCancel(res)) {
         setResume(res);
@@ -83,7 +83,7 @@ const BrandInfoForm = ({
         label="Company Registration"
         value={values.company?.companyName}
         error={errors.company?.companyName}
-        touched={touched.company?.company}
+        touched={touched.company?.companyName}
         initialTouched={true}
         handleChange={handleChange('company.companyName')}
       />
@@ -102,6 +102,7 @@ const BrandInfoForm = ({
         error={errors.company?.website}
         touched={touched?.website}
         initialTouched={true}
+        autoCapitalize='none'
         handleChange={handleChange('company.website')}
       />
       <CustomInput

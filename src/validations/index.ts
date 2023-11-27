@@ -63,7 +63,7 @@ export const createProfileSchema = (userRole: IUserRole) => {
     phone: Yup.string().required('Phone number is required'),
     gender: Yup.string().required('Gender is required'),
     age: Yup.number()
-      .required('Age is required!')
+      .required('Age is required')
       .min(15, 'Age must be greater than 14'),
     about: Yup.string().required('About is required'),
     volunteer: Yup.array().required('Volunteer is required'),
@@ -80,31 +80,28 @@ export const createProfileSchema = (userRole: IUserRole) => {
     }),
 
     // company validations
-    companyName: Yup.string()
-      .notRequired()
-      .matches(/^[A-Za-z]+$/, 'Invalid Last Name') // Ensures no spaces in the name
-      .min(3, 'Last Name must be at least 3 characters long'),
-    website: Yup.string()
-      .notRequired()
-      .matches(/^[A-Za-z]+$/, 'Invalid Last Name') // Ensures no spaces in the name
-      .min(3, 'Website must be at least 3 characters long'),
-    affiliation: Yup.string()
-      .notRequired()
-      .matches(/^[A-Za-z]+$/, 'Invalid Last Name') // Ensures no spaces in the name
-      .min(3, 'Affiliation must be at least 3 characters long'),
-    publication: Yup.string()
-      .notRequired()
-      .matches(/^[A-Za-z]+$/, 'Invalid Last Name') // Ensures no spaces in the name
-      .min(3, 'Publication must be at least 3 characters long'),
+    company: Yup.object({
+      companyName: Yup.string()
+        .matches(/^[A-Za-z]+$/, 'Invalid Company Name')
+        .min(3, 'Company Name must be at least 3 characters long'),
+      website: Yup.string().matches(
+        /^(https?:\/\/)?(www\.)?(?!.*facebook\.com)(\S*)$/i,
+        'Invalid Facebook URL format',
+      ),
+      affiliation: Yup.string()
+        .matches(/^[A-Za-z]+$/, 'Invalid Affiliation') // Ensures no spaces in the name
+        .min(3, 'Affiliation must be at least 3 characters long'),
+      publication: Yup.string()
+        .matches(/^[A-Za-z]+$/, 'Invalid Publication') // Ensures no spaces in the name
+        .min(3, 'Publication must be at least 3 characters long'),
+    }),
 
     // reference validations
-    referenceName: Yup.string()
-      .notRequired()
-      .matches(/^[A-Za-z]+$/, 'Invalid Last Name') // Ensures no spaces in the name
-      .min(3, 'Reference Name must be at least 3 characters long'),
-    contact: Yup.string()
-      .notRequired()
-      .matches(/^[A-Za-z]+$/, 'Invalid Last Name') // Ensures no spaces in the name
-      .min(3, 'Contact Name must be at least 3 characters long'),
+    reference: Yup.object({
+      referenceName: Yup.string()
+        .matches(/^[A-Za-z]+$/, 'Invalid Reference') // Ensures no spaces in the name
+        .min(3, 'Reference Name must be at least 3 characters long'),
+      contact: Yup.string().matches(/^[A-Za-z0-9]+$/, 'Invalid Contact'), // Ensures no spaces in the name
+    }),
   });
 };

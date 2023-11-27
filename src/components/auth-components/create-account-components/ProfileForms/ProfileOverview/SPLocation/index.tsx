@@ -165,7 +165,7 @@ const SPLocation = ({
               route="CityScreen"
             />
             <CustomSelect
-              label="Country"
+              label="County"
               placeholder="Select"
               value={values.country as string}
               error={errors.country}

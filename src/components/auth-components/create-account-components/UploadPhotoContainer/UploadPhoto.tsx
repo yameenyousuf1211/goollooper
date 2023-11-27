@@ -21,7 +21,7 @@ const UploadPhoto = ({image, setImage, name}: Props) => {
   const prevUserData = useSelector((state: RootState) => state.auth.user);
   const handleAddImage = async () => {
     const options: ImageLibraryOptions = {
-      mediaType: 'photo',
+      mediaType: 'mixed',
       includeBase64: false,
       quality: 0.8,
     };

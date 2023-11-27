@@ -32,7 +32,6 @@ const SettimeScreen = ({navigation}: any) => {
         {justifyContent: 'center', width: '100%', gap: 30},
       ]}>
       <View style={styles.timeContainer}>
-        <Text style={[globalStlyes.text16, {textAlign: 'center'}]}>Starts</Text>
         <DatePicker
           mode="time"
           open={open}
@@ -47,7 +46,7 @@ const SettimeScreen = ({navigation}: any) => {
           }}
         />
       </View>
-      <View style={styles.timeContainer}>
+      {/* <View style={styles.timeContainer}>
         <Text style={[globalStlyes.text16, {textAlign: 'center'}]}>Ends</Text>
         <DatePicker
           mode="time"
@@ -61,7 +60,7 @@ const SettimeScreen = ({navigation}: any) => {
             setOpen(false);
           }}
         />
-      </View>
+      </View> */}
     </View>
   );
 };

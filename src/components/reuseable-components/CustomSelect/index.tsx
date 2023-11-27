@@ -18,6 +18,7 @@ interface Props {
   error: string;
   route: string;
   isSingleItem?: boolean;
+  isDisable?: boolean;
 }
 
 const CustomSelect = ({
@@ -28,11 +29,13 @@ const CustomSelect = ({
   error,
   route,
   isSingleItem = false,
+  isDisable
 }: Props) => {
   const navigation = useNavigation<any>();
   return (
     <TouchableOpacity
       activeOpacity={0.5}
+      disabled={isDisable}
       onPress={() => navigation.navigate(route)}>
       <View
         style={{
@@ -44,6 +47,9 @@ const CustomSelect = ({
               : '#EDEDED',
           paddingBottom: 16,
           position: 'relative',
+          backgroundColor:  isDisable ? '#EDEDED' : undefined,
+          borderRadius: isDisable ? 12 : 0,
+          padding: isDisable ? 4 : 0
         }}>
         <View style={{position: 'absolute', right: 10, bottom: 16}}>
           <ChevronRightIcon />

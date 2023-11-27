@@ -40,6 +40,7 @@ const CustomInput = ({...props}: Props) => {
   const [isFocused, setIsFocused] = useState(false);
   const isError =
   props.error && ((props.touched && !props.value) || (props.error && props.value) || isFocused) 
+  console.log(props.error,props.label,"lavel")
 
 
   const handleChangeText = (text: string) => {
