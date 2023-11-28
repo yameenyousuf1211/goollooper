@@ -46,7 +46,7 @@ export const AuthStack = () => {
           fontFamily: 'SpaceGrotesk-Medium',
         },
       }}
-      initialRouteName="MapScreen">
+      initialRouteName="Splash">
       {/* //  initialRouteName="ScheduleScreen">  */}
       <Stack.Screen
         name="Splash"
@@ -90,7 +90,7 @@ export const AuthStack = () => {
         component={CreateAccountScreen}
         options={{headerShown: false}}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="ContactPermissionScreen"
         component={ContactPermissionScreen}
         options={{headerShown: false}}

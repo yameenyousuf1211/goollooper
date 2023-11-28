@@ -8,6 +8,7 @@ interface Props {
   extraStyles?: any;
   onPress?: () => void;
   extraTextStyles?: any;
+  testID?: string;
 }
 
 const CustomButton = ({
@@ -16,9 +17,11 @@ const CustomButton = ({
   isDisabled,
   onPress,
   extraTextStyles,
+  testID,
 }: Props) => {
   return (
     <Pressable
+      testID={testID}
       style={({pressed}) => pressed && styles.pressed}
       onPress={onPress}
       disabled={isDisabled}>

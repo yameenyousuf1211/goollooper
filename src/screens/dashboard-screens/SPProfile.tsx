@@ -1,114 +1,54 @@
 import React, {useState} from 'react';
-import {
-  View,
-  ScrollView,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import {View, ScrollView, Image, StyleSheet, Text} from 'react-native';
 import {globalStlyes} from '../../styles/GlobalStyles';
 import StarIcon from '../../../assets/icons/StarIcon';
 import {primaryColor} from '../../utils/colors';
 import LocationIconTwo from '../../../assets/icons/LocationIconTwo';
+import {Formik} from 'formik';
+import {profileInitialValues} from '../auth-screens/create-account-screens/CreateProfileScreen';
+import {createProfileSchema} from '../../validations';
+import ProfileForms from '../../components/auth-components/create-account-components/ProfileForms';
+import {IUser, IUserFormErrors} from '../../interfaces/user.interface';
 import {PROFILE_OPTIONS} from '../../utils/data';
-import ChevronBottomIcon from '../../../assets/icons/ChevronBottomIcon';
-import ChevronRightIcon from '../../../assets/icons/ChevronRightIcon';
-import ProfileOverview from '../../components/auth-components/create-account-components/ProfileForms/ProfileOverview';
-import VisualValidationForm from '../../components/auth-components/create-account-components/ProfileForms/VisualValidationForm';
-import BrandInfoForm from '../../components/auth-components/create-account-components/ProfileForms/BrandInfoForm';
-import ProfessionalCertificates from '../../components/auth-components/create-account-components/ProfileForms/ProfessionalCertificates';
-import Licensing from '../../components/auth-components/create-account-components/ProfileForms/Licensing';
-import Reference from '../../components/auth-components/create-account-components/ProfileForms/Reference';
-import LiabilityInsurance from '../../components/auth-components/create-account-components/ProfileForms/LiabilityInsurance';
-
-interface FormValues {
-  firstName: string;
-  lastName: string;
-  email: string;
-  username: string;
-  phone: string;
-  about: string;
-  gender: string;
-  age: string;
-  volunteer: string;
-  serviceProviderSpeciality: string;
-  addSchedule: string;
-  // brand
-  registration: string;
-  websiteUrl: string;
-  affiliations: string;
-  publications: string;
-  resume: string;
-
-  // location
-  state: string;
-  city: string;
-  country: string;
-
-  //reference
-  name: string;
-  contactInfo: string;
-}
+import {useSelector} from 'react-redux';
+import {RootState} from '../../redux/store';
+import CustomButton from '../../components/reuseable-components/CustomButton';
 
 const SPProfile = () => {
+  const boostType = useSelector((state: RootState) => state.auth.boostType);
+  const userRole = useSelector((state: RootState) => state.auth.userRole);
+  const userData = useSelector((state: RootState) => state.auth.user);
+  const [isProfileOverview, setIsProfileOverview] = useState<boolean>(false);
   const [selectedProfileOptions, setSelectedProfileOptions] = useState<
     string[]
   >([]);
-  const initialValues: FormValues = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    username: '',
-    phone: '',
-    about: '',
-    gender: '',
-    age: '',
-    volunteer: '',
-    serviceProviderSpeciality: '',
-    addSchedule: '',
-    // company
-    registration: '',
-    websiteUrl: '',
-    affiliations: '',
-    publications: '',
-    resume: '',
 
-    // loc
+  const [phoneCode, setPhoneCode] = useState<string>('');
 
-    state: '',
-    city: '',
-    country: '',
-    // reference
-    name: '',
-    contactInfo: '',
-  };
   const handleSelectProfileOption = (id: string) => {
+    if (id === 'p1') {
+      setIsProfileOverview(true);
+    } else {
+      setIsProfileOverview(false);
+    }
     if (selectedProfileOptions.includes(id)) {
+      setIsProfileOverview(false);
       const filterOptions = selectedProfileOptions.filter(
         (option: any) => option !== id,
       );
-      console.log(filterOptions, 'filter');
       setSelectedProfileOptions(filterOptions);
     } else {
       setSelectedProfileOptions((prev: any) => [...prev, id]);
     }
   };
 
+  const handleSubmit = () => {};
+
   return (
-    <View
-      style={[
-        globalStlyes.container,
-        {
-          alignItems: 'flex-start',
-          justifyContent: 'flex-start',
-          paddingLeft: 20,
-          paddingTop: 20,
-        },
-      ]}>
+    <View style={[globalStlyes.container]}>
       <ScrollView>
-        <View>
-          <View style={{flexDirection: 'row', gap: 8}}>
+        <View style={{width: '82%'}}>
+          <View style={{flexDirection: 'row', gap: 8, padding: 20}}>
             <Image
               source={{
                 uri: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600',
@@ -163,6 +103,49 @@ const SPProfile = () => {
                 </View>
               </View>
             </View>
+          </View>
+          <View style={{gap: 12, padding: 20}}>
+            <Formik
+              initialValues={profileInitialValues}
+              validationSchema={createProfileSchema(userRole)}
+              validationContext={{userRole: userRole}}
+              onSubmit={handleSubmit}>
+              {({
+                handleChange,
+                handleSubmit,
+                values,
+                errors,
+                touched,
+                setFieldValue,
+              }) =>
+                PROFILE_OPTIONS.map((profile: any) => {
+                  const isSelected = selectedProfileOptions.includes(
+                    profile.id,
+                  );
+                  return (
+                    <ProfileForms
+                      key={profile?.id}
+                      userData={userData as IUser}
+                      profile={profile}
+                      userRole={userRole}
+                      isSelected={isSelected}
+                      boostType={'BSL'}
+                      errors={errors as IUserFormErrors}
+                      values={values}
+                      touched={touched}
+                      selectedProfileOptions={selectedProfileOptions}
+                      setFieldValue={setFieldValue}
+                      setPhoneCode={setPhoneCode}
+                      handleChange={handleChange}
+                      onSelectProfileOption={handleSelectProfileOption}
+                    />
+                  );
+                })
+              }
+            </Formik>
+          </View>
+          <View style={{margin: 20,}}>
+            <CustomButton extraStyles={{backgroundColor: '#28BF5A'}}>Add To Go List</CustomButton>
           </View>
         </View>
       </ScrollView>

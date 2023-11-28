@@ -34,7 +34,7 @@ import CustomLoader from '../../../components/reuseable-components/CustomLoader'
 import ProfileForms from '../../../components/auth-components/create-account-components/ProfileForms';
 
 const {width, height} = Dimensions.get('screen');
-const initialValues: IUser = {
+export const profileInitialValues: IUser = {
   firstName: '',
   lastName: '',
   userName: '',
@@ -146,7 +146,7 @@ const CreateProfileScreen = ({navigation}: any) => {
         />
       ) : (
         <Formik
-          initialValues={initialValues}
+          initialValues={profileInitialValues}
           validationSchema={createProfileSchema(userRole)}
           validationContext={{userRole: userRole}}
           onSubmit={handleSubmit}>

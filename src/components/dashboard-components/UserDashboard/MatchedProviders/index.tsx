@@ -6,10 +6,10 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
-import {globalStlyes} from '../../../styles/GlobalStyles';
-import ChevronRightIcon from '../../../../assets/icons/ChevronRightIcon';
-import StarIcon from '../../../../assets/icons/StarIcon';
-import {primaryColor} from '../../../utils/colors';
+import {globalStlyes} from '../../../../styles/GlobalStyles';
+import ChevronRightIcon from '../../../../../assets/icons/ChevronRightIcon';
+import StarIcon from '../../../../../assets/icons/StarIcon';
+import {primaryColor} from '../../../../utils/colors';
 import {useNavigation} from '@react-navigation/native';
 
 interface Props {

@@ -296,73 +296,120 @@ export const INTERESTS = (types = [
 export const MATCHED_SERVICE_PROVIDERS = [
   {
     id: 'i1',
-    image: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600',
+    image:
+      'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600',
     name: 'Phillip Bator',
     distance: '93m away',
     type: 'Landscaper',
   },
   {
     id: 'i2',
-    image: 'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=600',
+    image:
+      'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=600',
     name: 'Nolan Curtis',
     distance: '104m away',
     type: 'Electrical',
   },
   {
     id: 'i3',
-    image: 'https://images.pexels.com/photos/874158/pexels-photo-874158.jpeg?auto=compress&cs=tinysrgb&w=600',
+    image:
+      'https://images.pexels.com/photos/874158/pexels-photo-874158.jpeg?auto=compress&cs=tinysrgb&w=600',
     name: 'Phillip Bator',
     distance: '22m away',
     type: 'Landscaper',
   },
   {
     id: 'i3sad214',
-    image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
+    image:
+      'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
     name: 'Phillip Bator',
     distance: '222m away',
     type: 'Landscaper',
   },
   {
     id: 'i323424',
-    image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
+    image:
+      'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
     name: 'Phillip Bator',
     distance: '222m away',
     type: 'Landscaper',
-  }, {
+  },
+  {
     id: 'i1234',
-    image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
+    image:
+      'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
     name: 'Phillip Bator',
     distance: '222m away',
     type: 'Landscaper',
-  }, {
+  },
+  {
     id: 'i32dasd14',
-    image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
+    image:
+      'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
     name: 'Phillip Bator',
     distance: '222m away',
     type: 'Landscaper',
-  }, {
+  },
+  {
     id: 'i32dsadaadasdsada14',
-    image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
+    image:
+      'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
     name: 'Phillip Bator',
     distance: '222m away',
     type: 'Landscaper',
-  }, {
+  },
+  {
     id: 'i32adsfdasdffds14',
-    image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
+    image:
+      'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
     name: 'Phillip Bator',
     distance: '222m away',
     type: 'Landscaper',
-  }, {
+  },
+  {
     id: 'i3223342424asdfdcsdfa14',
-    image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
+    image:
+      'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
     name: 'Phillip Bator',
     distance: '222m away',
     type: 'Landscaper',
-  }, {
+  },
+  {
     id: 'i45wreiwrrjsdfnsfn132',
-    image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
+    image:
+      'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
     name: 'Phillip Bator',
     distance: '222m away',
     type: 'Landscaper',
+  },
+];
+
+export const MATCHED_TASKS = [
+  {
+    _id: 'sasdj1',
+    name: 'Cooper',
+    image:
+      'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=600',
+    postedTime: 'just now',
+    title: 'Help me Remodel My house',
+    description: 'I need someone who can help me remodel my house. ',
+  },
+  {
+    _id: 'sasadasdsfgerqjrjnqesdj1',
+    name: 'Zaire',
+    image:
+      'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=600',
+    postedTime: '3 min ago',
+    title: 'Help me Remodel My house',
+    description: 'I need someone who can help me remodel my house. ',
+  },
+  {
+    _id: 'sasdsadasdj1',
+    name: 'Cooper',
+    image:
+      'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&w=600',
+    postedTime: '5 min ago',
+    title: 'Help me Remodel My house',
+    description: 'I need someone who can help me remodel my house. ',
   },
 ];

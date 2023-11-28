@@ -7,7 +7,7 @@ const email = Yup.string()
 
 const notRequiredEmail = Yup.string()
   .matches(
-    /^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+    /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
     'Invalid email',
   )
   .notRequired();

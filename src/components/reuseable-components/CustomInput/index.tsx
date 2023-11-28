@@ -8,7 +8,11 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import {primaryColor, redColor, secondaryTextColor} from '../../../utils/colors';
+import {
+  primaryColor,
+  redColor,
+  secondaryTextColor,
+} from '../../../utils/colors';
 import HidePasswordIcon from '../../../../assets/icons/HidePasswordIcon';
 import {verticalScale} from '../../../utils/metrics';
 import WarnIcon from '../../../../assets/icons/WarnIcon';
@@ -30,6 +34,7 @@ interface Props {
   isDisable?: boolean;
   isTextArea?: boolean;
   isMultiline?: boolean;
+  testID?: string;
   handleChange: (e: any) => void;
 }
 
@@ -39,9 +44,11 @@ const CustomInput = ({...props}: Props) => {
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState(false);
   const isError =
-  props.error && ((props.touched && !props.value) || (props.error && props.value) || isFocused) 
-  console.log(props.error,props.label,"lavel")
-
+    props.error &&
+    ((props.touched && !props.value) ||
+      (props.error && props.value) ||
+      isFocused);
+  console.log(props.error, props.label, 'lavel');
 
   const handleChangeText = (text: string) => {
     if (props.handleChange) {
@@ -56,7 +63,7 @@ const CustomInput = ({...props}: Props) => {
     setIsFocused(false);
   };
   return (
-    <View style={{position: 'relative',width: '100%'}}>
+    <View style={{position: 'relative', width: '100%'}}>
       <Text
         style={{
           color: secondaryTextColor,
@@ -66,15 +73,25 @@ const CustomInput = ({...props}: Props) => {
         {props.label}
       </Text>
       <TextInput
+        testID={props.testID}
         style={[
           styles.input,
           {
             borderBottomColor: isError ? redColor : '#EDEDED',
-            backgroundColor: props.isDisable && props.label !== "Set Location" ? '#EDEDED' : undefined,
-            marginTop: props.isDisable && props.label !== "Set Location" ? 10 : undefined,
-            paddingTop: props.isDisable && props.label !== "Set Location" ? 14 : undefined,
-            paddingLeft: props.isDisable && props.label !== "Set Location" ? 6 : 0,
-
+            backgroundColor:
+              props.isDisable && props.label !== 'Set Location'
+                ? '#EDEDED'
+                : undefined,
+            marginTop:
+              props.isDisable && props.label !== 'Set Location'
+                ? 10
+                : undefined,
+            paddingTop:
+              props.isDisable && props.label !== 'Set Location'
+                ? 14
+                : undefined,
+            paddingLeft:
+              props.isDisable && props.label !== 'Set Location' ? 6 : 0,
           },
           props.extraStyles,
         ]}

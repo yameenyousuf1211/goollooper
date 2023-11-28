@@ -97,7 +97,7 @@ const LoginScreen = ({navigation}: any) => {
     stopLoading();
   };
   return (
-    <SafeAreaView>
+    <SafeAreaView testID="loginScreen">
       <ScrollView
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always">
@@ -129,6 +129,7 @@ const LoginScreen = ({navigation}: any) => {
                 <View>
                   <View style={styles.inputFieldsContainer}>
                     <CustomInput
+                      testID="loginEmail"
                       label="Email Address"
                       value={values.email}
                       error={errors.email}
@@ -139,6 +140,7 @@ const LoginScreen = ({navigation}: any) => {
                       handleChange={handleChange('email')}
                     />
                     <CustomInput
+                      testID="loginPassword"
                       label="Password"
                       value={values.password}
                       error={errors.password}
@@ -166,7 +168,7 @@ const LoginScreen = ({navigation}: any) => {
                     </View>
                   </View>
                   <View style={{width: '100%', paddingBottom: height * 0.012}}>
-                    <CustomButton isDisabled={isLoading} onPress={handleSubmit}>
+                    <CustomButton testID='loginButton' isDisabled={isLoading} onPress={handleSubmit}>
                       {isLoading ? <CustomLoader /> : 'Sign In'}{' '}
                     </CustomButton>
                   </View>

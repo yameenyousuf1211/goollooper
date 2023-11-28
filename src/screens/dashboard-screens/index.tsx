@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,17 +7,22 @@ import {
   Image,
   ImageBackground,
   ScrollView,
+  Animated,
 } from 'react-native';
 import {globalStlyes} from '../../styles/GlobalStyles';
 import SettingIcon from '../../../assets/icons/SettingIcon';
 import NotificationIcon from '../../../assets/icons/NotificationIcon';
 import SearchIconTwo from '../../../assets/icons/SearchIconTwo';
 import {primaryColor} from '../../utils/colors';
-import ServiceInterests from '../../components/dashboard-components/ServiceInterests';
-import {INTERESTS, MATCHED_SERVICE_PROVIDERS} from '../../utils/data';
-import MatchedProviders from '../../components/dashboard-components/MatchedProviders';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../redux/store';
+import UserDashboard from '../../components/dashboard-components/UserDashboard';
+import ProviderDashboard from '../../components/dashboard-components/ProviderDashboard';
 
 const DashboardScreen = ({navigation}: any) => {
+  const userRole = useSelector((state: RootState) => state.auth.userRole);
+  const animatedValue = useRef(new Animated.Value(0)).current;
+
   useEffect(() => {
     const headerRightButton = (
       <View style={styles.headerRight}>
@@ -64,8 +69,8 @@ const DashboardScreen = ({navigation}: any) => {
       style={[
         globalStlyes.container,
         {
-          // alignItems: 'flex-start',
-          // justifyContent: 'flex-start',
+          alignItems: 'flex-start',
+          justifyContent: 'flex-start',
         },
       ]}>
       {/* <Text style={globalStlyes.text14}>Dashboard Coming soon!</Text> */}
@@ -78,8 +83,10 @@ const DashboardScreen = ({navigation}: any) => {
             ]}>
             My Activities
           </Text>
-          <ServiceInterests interest={INTERESTS} />
-          <MatchedProviders providers={MATCHED_SERVICE_PROVIDERS} />
+          {/* // FOR NORMAL USERS */}
+          <UserDashboard />
+          {/* // FOR subscribed USERS */}
+          {/* <ProviderDashboard /> */}
         </View>
       </ScrollView>
     </View>

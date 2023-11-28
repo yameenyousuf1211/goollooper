@@ -5,8 +5,8 @@ import {
   View,
   ScrollView,
 } from 'react-native';
-import {primaryColor} from '../../../utils/colors';
-import {globalStlyes} from '../../../styles/GlobalStyles';
+import {primaryColor} from '../../../../utils/colors';
+import {globalStlyes} from '../../../../styles/GlobalStyles';
 
 interface Props {
   interest: any;

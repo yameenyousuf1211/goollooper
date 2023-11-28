@@ -12,9 +12,8 @@ import CustomButton from '../../../components/reuseable-components/CustomButton'
 const {width, height} = Dimensions.get('screen');
 
 const SplashScreen = ({navigation}: any) => {
-
   return (
-    <SafeAreaView>
+    <SafeAreaView testID="splashScreen">
       <View style={styles.container}>
         <Image
           source={require('../../../../assets/splash-background.png')}
@@ -34,7 +33,7 @@ const SplashScreen = ({navigation}: any) => {
             </Text>
           </View>
           <View style={{width: '100%'}}>
-            <CustomButton onPress={() => navigation.navigate('Login')}>
+            <CustomButton testID='startButton' onPress={() => navigation.navigate('Login')}>
               Start
             </CustomButton>
           </View>
@@ -81,6 +80,6 @@ const styles = StyleSheet.create({
   slogan: {
     fontSize: width * 0.038,
     fontFamily: 'SpaceGrotesk-Regular',
-    color: 'rgba(54, 54, 54, 1)'
+    color: 'rgba(54, 54, 54, 1)',
   },
 });
